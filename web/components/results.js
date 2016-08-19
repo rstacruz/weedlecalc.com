@@ -28,6 +28,8 @@ function ResultStep ({props}) {
       return <EggStep step={step} />
     case 'transfer':
       return <TransferStep step={step} />
+    case 'evolve-transfer':
+      return <EvolveTransferStep step={step} />
     case 'evolve':
       return <EvolveStep step={step} />
     default:
@@ -39,7 +41,7 @@ function TransferStep ({props}) {
   const {step} = props
   return <div class="calculator-step -transfer">
     <span class="direction">
-      Transfer {step.count}x {pokedex.data[step.pokemonId].name}.
+      Transfer <strong>{step.count}</strong> {pokedex.data[step.pokemonId].name}.
     </span>
 
     <span class="meta">
@@ -60,7 +62,20 @@ function EvolveStep ({props}) {
   const {step} = props
   return <div class="calculator-step -evolve">
     <span class="direction">
-      Evolve {step.count}x {pokedex.data[step.pokemonId].name}.
+      Evolve <strong>{step.count}</strong> {pokedex.data[step.pokemonId].name}.
+    </span>
+    <span class="meta">
+      <span class="exp">{step.exp} EXP</span>
+      <span class="duration">{ms(step.duration * 1000)}</span>
+    </span>
+  </div>
+}
+
+function EvolveTransferStep ({props}) {
+  const {step} = props
+  return <div class="calculator-step -evolve">
+    <span class="direction">
+      Evolve and transfer <strong>{step.count}</strong> {pokedex.data[step.pokemonId].name}.
     </span>
     <span class="meta">
       <span class="exp">{step.exp} EXP</span>

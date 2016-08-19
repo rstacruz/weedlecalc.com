@@ -115,4 +115,41 @@ test.group('calc()', test => {
     let result = calc(have)
     console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
   })
+
+  test.only('transfer, 25x pidgeys', t => {
+    // 25/0
+    // transfer(12) => 13/12
+    // tevolve(1) => 12/1
+    // transfer(11) => 1/12
+    // evolve(1) => 0/0
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 25,
+          candies: 1
+        }
+      },
+      transfer: true
+    }
+
+    let result = calc(have)
+    console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
+  })
+
+  test('transfer, 3x pidgey, 25x candies', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 3,
+          candies: 25
+        }
+      },
+      transfer: true
+    }
+
+    let result = calc(have)
+    console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
+  })
 })
