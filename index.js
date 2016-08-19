@@ -12,12 +12,13 @@ function calc ({pokemon}) {
   //
   let state = {
     inventory: pokemon,
-    steps: [
+    presteps: [
       {
         action: 'start',
         inventory: pokemon
       }
-    ]
+    ],
+    steps: []
   }
 
   state = evolve(state, { pokemonId: 16 })
@@ -30,7 +31,9 @@ function calc ({pokemon}) {
  * Creates a transfer and evolve steps (multiple times).
  */
 
-function evolve ({steps, inventory}, {pokemonId}) {
+function evolve ({presteps, steps, inventory}, {pokemonId}) {
+  let newSteps = []
+
   // Find the Pidgey
   const thisItem = inventory[pokemonId]
   const thisPoke = pokedex.data[pokemonId]
@@ -61,7 +64,7 @@ function evolve ({steps, inventory}, {pokemonId}) {
       inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
       inventory = set(inventory, `${pokemonId}.candies`, candies)
 
-      steps = push(steps, {
+      newSteps = push(newSteps, {
         action: 'transfer',
         pokemonId: nextPoke.id,
         unevolvedPokemonId: pokemonId,
@@ -77,7 +80,7 @@ function evolve ({steps, inventory}, {pokemonId}) {
       inventory = set(inventory, `${pokemonId}.count`, count)
       inventory = set(inventory, `${pokemonId}.candies`, candies)
 
-      steps = push(steps, {
+      newSteps = push(newSteps, {
         action: 'transfer',
         pokemonId,
         count: pidgeysToTransfer,
@@ -92,10 +95,19 @@ function evolve ({steps, inventory}, {pokemonId}) {
     inventory = set(inventory, `${pokemonId}.count`, count)
     inventory = set(inventory, `${pokemonId}.candies`, candies)
     inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
-    steps = push(steps, { action: 'evolve', pokemonId, count: toEvolve, inventory })
+    newSteps = push(newSteps, { action: 'evolve', pokemonId, count: toEvolve, inventory })
   }
 
-  return { inventory, steps }
+  // Put the first transfer as part of pre-egg
+  if (newSteps.length > 1 && newSteps[0].action === 'transfer') {
+    // TODO: even pidgeotto transfers should count before the egg
+    presteps = presteps.concat(newSteps.slice(0, 1))
+    steps = steps.concat(newSteps.slice(1))
+  } else {
+    steps = steps.concat(newSteps)
+  }
+
+  return { inventory, presteps, steps }
 }
 
 function getMaxTransferable (evolvedCount, count, candies, tnl) {
