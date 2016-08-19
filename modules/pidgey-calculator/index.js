@@ -159,7 +159,11 @@ function evolveWithTransfer({presteps, steps, inventory}, {pokemonId}) {
  * Creates a transfer and evolve steps (multiple times).
  */
 
-function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, options) {
+function evolveWithoutTransfer (state, {pokemonId}, options) {
+  return _evolve(state, {pokemonId}, options)
+}
+
+function _evolve ({presteps, steps, inventory}, {pokemonId}, options) {
   let newSteps = []
 
   // Find the Pidgey
