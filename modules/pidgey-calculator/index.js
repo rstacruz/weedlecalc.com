@@ -29,141 +29,20 @@ function calc ({pokemon, transfer}) {
 
   let options = { transfer }
 
-  if (!transfer) {
-    state = pokedex.evolvables.reduce((state, id) => {
-      if (!pokemon[id]) return state
-      return evolveWithoutTransfer(state, { pokemonId: id }, options)
-    }, state)
-  } else {
-    state = pokedex.evolvables.reduce((state, id) => {
-      if (!pokemon[id]) return state
-      return evolveWithTransfer(state, { pokemonId: id }, options)
-    }, state)
-  }
+  state = pokedex.evolvables.reduce((state, id) => {
+    if (!pokemon[id]) return state
+    return evolve(state, id, options)
+  }, state)
 
   return state
 }
 
 /**
- * lol
- */
-
-function evolveWithTransfer({presteps, steps, inventory}, {pokemonId}) {
-  let newSteps = []
-
-  // Find the Pidgey
-  const thisItem = inventory[pokemonId]
-  const thisPoke = pokedex.data[pokemonId]
-
-  // Find the Pidgeotto
-  let nextItem, nextPoke
-  if (thisPoke.evolvesTo) {
-    nextPoke = pokedex.data[thisPoke.evolvesTo]
-    nextItem = inventory[thisPoke.evolvesTo]
-  }
-
-  let candies = thisItem.candies
-  let count = thisItem.count
-  let evolvedCount = (nextItem ? nextItem.count : 0)
-  const tnl = thisPoke.candiesToEvolve
-
-  // Step 1: transfer enough for 12 candies
-  // Step 2: evolve and transfer
-  // Step 3: evolve the last one
-  while (true) {
-    const [pidgeysToTransfer, pidgeottosToTransfer, toEvolve] =
-      getMaxTransferable(count, evolvedCount, candies, tnl, { transfer: true })
-
-    if (toEvolve === 0) break
-
-    // Transfer Pidgettos
-    if (pidgeottosToTransfer > 0) {
-      evolvedCount -= pidgeottosToTransfer
-      candies += pidgeottosToTransfer
-      inventory = set(inventory, `${nextPoke.id}.id`, nextPoke.id)
-      inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
-
-      newSteps = push(newSteps, {
-        action: 'transfer',
-        pokemonId: nextPoke.id,
-        unevolvedPokemonId: pokemonId,
-        count: pidgeottosToTransfer,
-        duration: pidgeottosToTransfer * TRANSFER_DURATION,
-        inventory
-      })
-    }
-
-    // Transfer Pidgeys
-    if (pidgeysToTransfer > 0) {
-      count -= pidgeysToTransfer
-      candies += pidgeysToTransfer
-      inventory = set(inventory, `${pokemonId}.count`, count)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
-
-      newSteps = push(newSteps, {
-        action: 'transfer',
-        pokemonId,
-        count: pidgeysToTransfer,
-        duration: pidgeysToTransfer * TRANSFER_DURATION,
-        inventory
-      })
-    }
-
-    // Evolve
-    if (toEvolve > 1) {
-      count -= toEvolve - 1
-      candies -= (toEvolve - 1) * (tnl - 1)
-      inventory = set(inventory, `${pokemonId}.count`, count)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
-      newSteps = push(newSteps, {
-        action: 'transfer-evolve',
-        pokemonId,
-        count: toEvolve - 1,
-        duration: (toEvolve - 1) * TRANSFER_EVOLVE_DURATION,
-        inventory
-      })
-    }
-
-    if (toEvolve > 0) {
-      count -= 1
-      candies -= tnl
-      evolvedCount += 1
-      inventory = set(inventory, `${pokemonId}.count`, count)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
-      inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
-      newSteps = push(newSteps, {
-        action: 'evolve',
-        pokemonId,
-        count: 1,
-        duration: 1 * EVOLVE_DURATION,
-        inventory
-      })
-    }
-  }
-
-  // Put the first transfer as part of pre-egg steps
-  // TODO: even pidgeotto transfers should count before the egg
-  if (newSteps.length > 1 && newSteps[0].action === 'transfer') {
-    presteps = presteps.concat(newSteps.slice(0, 1))
-    steps = steps.concat(newSteps.slice(1))
-  } else {
-    steps = steps.concat(newSteps)
-  }
-
-  return { inventory, presteps, steps }
-}
-
-/**
- * evolveWithoutTransfer:
+ * evolve:
  * Creates a transfer and evolve steps (multiple times).
  */
 
-function evolveWithoutTransfer (state, {pokemonId}, options) {
-  return _evolve(state, {pokemonId}, options)
-}
-
-function _evolve ({presteps, steps, inventory}, {pokemonId}, options) {
+function evolve ({presteps, steps, inventory}, pokemonId, options = {}) {
   let newSteps = []
 
   // Find the Pidgey
@@ -171,60 +50,38 @@ function _evolve ({presteps, steps, inventory}, {pokemonId}, options) {
   const thisPoke = pokedex.data[pokemonId]
 
   // Find the Pidgeotto
-  const nextPoke = thisPoke.evolvesTo && pokedex.data[thisPoke.evolvesTo]
+  const nextId = thisPoke.evolvesTo && pokedex.data[thisPoke.evolvesTo].id
   const tnl = thisPoke.candiesToEvolve
 
   while (true) {
     let candies = get(inventory, `${pokemonId}.candies`)
     let count = get(inventory, `${pokemonId}.count`)
-    let evolvedCount = get(inventory, `${nextPoke.id}.count`)
+    let evolvedCount = get(inventory, `${nextId}.count`)
     const [pidgeysToTransfer, pidgeottosToTransfer, toEvolve] =
-      getMaxTransferable(count, evolvedCount, candies, tnl)
+      getMaxTransferable(count, evolvedCount, candies, tnl, options)
 
     if (toEvolve === 0) break
 
     // Transfer Pidgettos
     if (pidgeottosToTransfer > 0) {
-      inventory = set(inventory, `${nextPoke.id}.id`, nextPoke.id)
-      inventory = update(inventory, `${nextPoke.id}.count`, c => c - pidgeottosToTransfer)
-      inventory = update(inventory, `${pokemonId}.candies`, c => c + pidgeottosToTransfer)
-
-      newSteps = push(newSteps, {
-        action: 'transfer',
-        pokemonId: nextPoke.id,
-        unevolvedPokemonId: pokemonId,
-        count: pidgeottosToTransfer,
-        duration: pidgeottosToTransfer * TRANSFER_DURATION,
-        inventory
-      })
+      [inventory, newSteps] =
+        transferPidgeottos([inventory, newSteps], pokemonId, nextId, pidgeottosToTransfer)
     }
 
     // Transfer Pidgeys
     if (pidgeysToTransfer > 0) {
-      inventory = update(inventory, `${pokemonId}.count`, c => c - pidgeysToTransfer)
-      inventory = update(inventory, `${pokemonId}.candies`, c => c + pidgeysToTransfer)
-
-      newSteps = push(newSteps, {
-        action: 'transfer',
-        pokemonId,
-        count: pidgeysToTransfer,
-        duration: pidgeysToTransfer * TRANSFER_DURATION,
-        inventory
-      })
+      [inventory, newSteps] =
+        transferPidgeys([inventory, newSteps], pokemonId, pidgeysToTransfer)
     }
 
     // Evolve
-    inventory = update(inventory, `${pokemonId}.count`, c => c - toEvolve)
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - toEvolve * tnl)
-    inventory = update(inventory, `${nextPoke.id}.count`, c => c + toEvolve)
-    newSteps = push(newSteps, {
-      action: 'evolve',
-      pokemonId,
-      count: toEvolve,
-      exp: toEvolve * 1000,
-      duration: toEvolve * EVOLVE_DURATION,
-      inventory
-    })
+    if (options.transfer) {
+      [inventory, newSteps] =
+        evolveAndTransfer([inventory, newSteps], pokemonId, nextId, toEvolve, tnl)
+    } else {
+      [inventory, newSteps] =
+        evolveOnly([inventory, newSteps], pokemonId, nextId, toEvolve, tnl)
+    }
   }
 
   // Put the first transfer as part of pre-egg steps
@@ -237,6 +94,100 @@ function _evolve ({presteps, steps, inventory}, {pokemonId}, options) {
   }
 
   return { inventory, presteps, steps }
+}
+
+/*
+ * Transfer pokemon
+ */
+
+function transferPidgeottos ([inventory, steps], pokemonId, nextId, toTransfer) {
+  inventory = update(inventory, `${nextId}.count`, c => c - toTransfer)
+  inventory = update(inventory, `${pokemonId}.candies`, c => +c + toTransfer)
+
+  steps = push(steps, {
+    action: 'transfer',
+    pokemonId: nextId,
+    unevolvedPokemonId: pokemonId,
+    count: toTransfer,
+    duration: toTransfer * TRANSFER_DURATION,
+    inventory
+  })
+
+  return [inventory, steps]
+}
+
+/**
+ * Internal: Transfer pidgeys
+ */
+
+function transferPidgeys ([inventory, steps], pokemonId, toTransfer) {
+  inventory = update(inventory, `${pokemonId}.count`, c => c - toTransfer)
+  inventory = update(inventory, `${pokemonId}.candies`, c => c + toTransfer)
+
+  steps = push(steps, {
+    action: 'transfer',
+    pokemonId,
+    count: toTransfer,
+    duration: toTransfer * TRANSFER_DURATION,
+    inventory
+  })
+
+  return [inventory, steps]
+}
+
+/**
+ * Internal: adds `evolve` steps
+ */
+
+function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
+  inventory = update(inventory, `${pokemonId}.count`, c => c - toEvolve)
+  inventory = update(inventory, `${pokemonId}.candies`, c => c - toEvolve * tnl)
+  inventory = update(inventory, `${nextId}.count`, c => c + toEvolve)
+
+  steps = push(steps, {
+    action: 'evolve',
+    pokemonId,
+    count: toEvolve,
+    exp: toEvolve * 1000,
+    duration: toEvolve * EVOLVE_DURATION,
+    inventory
+  })
+
+  return [inventory, steps]
+}
+
+/**
+ * Internal: adds `evolve-transfer` steps
+ */
+
+function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
+  // Evolve
+  if (toEvolve > 1) {
+    inventory = update(inventory, `${pokemonId}.count`, c => c - (toEvolve - 1))
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - (toEvolve - 1) * (tnl - 1))
+    steps = push(steps, {
+      action: 'transfer-evolve',
+      pokemonId,
+      count: toEvolve - 1,
+      duration: (toEvolve - 1) * TRANSFER_EVOLVE_DURATION,
+      inventory
+    })
+  }
+
+  if (toEvolve > 0) {
+    inventory = update(inventory, `${pokemonId}.count`, c => c - 1)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - tnl)
+    inventory = update(inventory, `${nextId}.count`, c => c + 1)
+    steps = push(steps, {
+      action: 'evolve',
+      pokemonId,
+      count: 1,
+      duration: 1 * EVOLVE_DURATION,
+      inventory
+    })
+  }
+
+  return [inventory, steps]
 }
 
 /*

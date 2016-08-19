@@ -117,11 +117,6 @@ test.group('calc()', test => {
   })
 
   test('transfer, 25x pidgeys', t => {
-    // 25/0
-    // transfer(12) => 13/12
-    // tevolve(1) => 12/1
-    // transfer(11) => 1/12
-    // evolve(1) => 0/0
     const have = {
       pokemon: {
         [PIDGEY]: {
