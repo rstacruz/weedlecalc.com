@@ -170,6 +170,7 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
       action: 'transfer-evolve',
       pokemonId,
       count: toEvolve - 1,
+      exp: (toEvolve - 1) * 1000,
       duration: (toEvolve - 1) * TRANSFER_EVOLVE_DURATION,
       inventory
     })
@@ -183,6 +184,7 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
       action: 'evolve',
       pokemonId,
       count: 1,
+      exp: 1000,
       duration: 1 * EVOLVE_DURATION,
       inventory
     })
