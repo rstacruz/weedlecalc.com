@@ -121,6 +121,7 @@ function Inventory ({props}) {
   const nextName = nextId && pokedex.data[nextId].name
 
   return <div class="calculator-details">
+    <span class="label">You'll have:</span>
     <span class="item">
       {inventory[id].count} {plural(inventory[id].count, name)}
     </span>

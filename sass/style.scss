@@ -295,6 +295,7 @@ select {
   border-top: solid 1px $line-color;
   padding-top: 16px;
 
+  > .label,
   > .item {
     margin-right: 16px;
   }
