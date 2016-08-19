@@ -136,10 +136,10 @@ function PidgeyRow({props}) {
 }
 
 function pokemonOptions () {
-  const base = map([10, 13, 16, 19, 41], id =>
+  const base = map([10, 13, 16, 19, 21, 41], id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
-  const evolved = map([11, 14, 17, 20, 42], id =>
+  const evolved = map([11, 14, 17, 20, 22, 42], id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
   return []

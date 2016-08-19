@@ -64,6 +64,17 @@ var data = {
     name: 'Raticate',
     evolvesFrom: 19
   },
+  21: {
+    id: 21,
+    name: 'Spearow',
+    evolvesTo: 22,
+    candiesToEvolve: 25
+  },
+  22: {
+    id: 22,
+    name: 'Fearow',
+    evolvesFrom: 21
+  },
   41: {
     id: 41,
     name: 'Zubat',
@@ -82,6 +93,6 @@ var data = {
  * Non-evolved pokemon
  */
 
-const evolvables = [ 10, 13, 16, 19, 41 ]
+const evolvables = [ 10, 13, 16, 19, 21, 41 ]
 
 module.exports = { data, evolvables }
