@@ -4,8 +4,9 @@
 
 $line-color: rgba(#808099, .1);
 $primary: #7080a0;
-$accent: dodgerblue;
+$accent: #3498db;
 $sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+$small: .86em;
 
 @mixin clearfix {
   &::after {
@@ -15,6 +16,8 @@ $sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubunt
     clear: both;
   }
 }
+
+@include ion-font;
 
 * {
   box-sizing: border-box;
@@ -28,9 +31,9 @@ body {
 
 .app-root {
   width: 500px;
-  margin: 0 auto;
+  margin: 32px auto;
   background: white;
-  box-shadow: 0 4px 10px rgba(black, .2);
+  box-shadow: 0 8px 16px rgba($accent, .2);
 }
 
 .calculator-steps {
@@ -64,12 +67,44 @@ body {
   }
 }
 
+.pidgey-form {
+  padding: 16px;
+  background: $accent;
+  color: lighten($accent, 20%);
+}
+
 .pidgey-table {
   width: 100%;
   table-layout: fixed;
+  border-collapse: collapse;
+  margin-bottom: 16px;
 
   > thead > tr,
   > tbody > tr {
+    > th, > td {
+      padding: 0;
+      margin: 0;
+      padding-right: 8px;
+    }
+
+    > td {
+      border-top: solid 1px rgba(white, .1);
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    > th:last-child,
+    > td:last-child {
+      padding-right: 0;
+    }
+
+    > th {
+      font-weight: normal;
+      text-align: right;
+      padding-bottom: 8px;
+      font-size: $small;
+    }
+
     > .pokemon {
       width: 60%;
     }
@@ -95,11 +130,72 @@ body {
 
 .pidgey-table-add {
   > button {
+    cursor: pointer;
+    text-align: left;
+    font-size: $small;
     background: transparent;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 3px;
     outline: 0;
-    padding: 0;
+    padding: 0 8px;
     border: 0;
-    color: $primary;
-    margin-left: 16px;
+    color: lighten($accent, 20%);
+    height: 32px;
+    line-height: 32px;
+  }
+
+  > button:hover,
+  > button:focus {
+    color: white;
+  }
+
+  > button::before {
+    @include ion-icon('ios-plus-outline', 24px);
+    color: white;
+    margin-right: 8px;
+  }
+}
+
+.form-control {
+  background: transparent;
+  border: 0;
+  padding: 0 8px;
+  background: rgba(black, .1);
+  border-radius: 2px;
+
+  height: 24px;
+  line-height: 24px;
+  color: white;
+  text-align: right;
+  font-size: $small;
+
+  &:focus,
+  &:active {
+    outline: 0;
+  }
+
+  &:focus {
+    background: rgba(white, .1);
+  }
+}
+
+select {
+  background: transparent;
+  border: 0;
+  color: white;
+  font-weight: bold;
+}
+
+.checkbox-label {
+  font-size: $small;
+  margin-top: 16px;
+  text-align: right;
+  display: block;
+
+  > input {
+    margin-left: 8px;
+    float: right;
   }
 }

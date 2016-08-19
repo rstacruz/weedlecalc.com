@@ -14,21 +14,26 @@ function PidgeyForm ({state, setState, dispatch, path}) {
     <form id={'' + path + '-form'}>
       <table class="pidgey-table">
         <thead>
-          <th class="pokemon"></th>
-          <th class="count">Count</th>
-          <th class="candies">Candies</th>
+          <tr>
+            <th class="pokemon"></th>
+            <th class="count">Count</th>
+            <th class="candies">Candies</th>
+          </tr>
         </thead>
         <tbody>
           {map(range(count), n =>
             <PidgeyRow id={n} onupdate={submit(`${path}-form`, dispatch)} />)}
           <tr>
             <td colspan="3" class="pidgey-table-add">
-              <button onclick={addRow(count, setState, 1)}>+</button>
-              <button onclick={addRow(count, setState, -1)}>&minus;</button>
+              <button onclick={addRow(count, setState, 1)}>Add another</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <label class="checkbox-label">
+        <input type="checkbox" name="transfer" value="1" />
+        <span>Transfer after evolving</span>
+      </label>
     </form>
   </div>
 }
@@ -48,15 +53,20 @@ function submit (formId, dispatch) {
 
     // It's got the wrong keys, let's fix that. Also let's numerify the strings
     const pokemon = reduce(data.pokemon, (list, pokemon) => {
-      const id = +pokemon.id
-      const candies = +pokemon.candies
-      const count = +pokemon.count
+      const id = int(pokemon.id)
+      const candies = int(pokemon.candies)
+      const count = int(pokemon.count)
       list[id] = { id, candies, count }
       return list
     }, {})
 
     dispatch(calculate({ pokemon }))
   }
+}
+
+function int (n) {
+  const result = +n
+  return isNaN(result) ? 0 : n
 }
 
 function PidgeyRow({props}) {
@@ -69,13 +79,15 @@ function PidgeyRow({props}) {
     </td>
 
     <td class="count">
-      <input type="number"
+      <input type="text"
+        class="form-control"
         name={`pokemon[${id}][count]`}
         oninput={props.onupdate} />
     </td>
 
     <td class="candies">
-      <input type="number"
+      <input type="text"
+        class="form-control"
         name={`pokemon[${id}][candies]`}
         oninput={props.onupdate} />
     </td>

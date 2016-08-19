@@ -4,8 +4,6 @@ import Results from './results'
 
 function App ({props, context}) {
   return <div class="app-root">
-    <h1>Pidgey Calculator</h1>
-
     <PidgeyForm />
 
      {context.result
