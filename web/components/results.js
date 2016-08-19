@@ -3,8 +3,8 @@ import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
 import reduce from 'lodash/reduce'
 import map from 'lodash/map'
-import ms from 'ms'
 import numberFormat from 'number-format.js'
+import ms from '../helpers/ms'
 
 const fmt = numberFormat.bind(null, '#,###.')
 
