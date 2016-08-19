@@ -55,7 +55,7 @@ test.group('calc()', test => {
     t.deepEqual(steps[3].inventory[PIDGEY].count, 96 - 83 - 7 - 5 - 1)
     t.deepEqual(steps[3].inventory[PIDGEY].candies, 0)
 
-    t.equal(result.totals.duration, 320)
+    t.equal(result.totals.duration, 380)
     t.equal(result.totals.exp, 8000)
   })
 
@@ -98,7 +98,7 @@ test.group('calc()', test => {
     t.equal(result.steps[0].inventory[PIDGEY].count, 0)
     t.equal(result.steps[0].inventory[PIDGEOTTO].count, 1)
 
-    t.equal(result.totals.duration, 25)
+    t.equal(result.totals.duration, 40)
     t.equal(result.totals.exp, 1000)
   })
 
@@ -155,7 +155,7 @@ test.group('calc()', test => {
     t.equal(result.steps[1].inventory[PIDGEY].candies, 1 + 22 - 11 - 12)
     t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
 
-    t.equal(result.totals.duration, 55)
+    t.equal(result.totals.duration, 85)
     t.equal(result.totals.exp, 2000)
   })
 
@@ -190,7 +190,7 @@ test.group('calc()', test => {
     t.equal(result.steps.length, 0)
   })
 
-  test.only('zeroes, transfer', t => {
+  test('zeroes, transfer', t => {
     const have = {
       pokemon: {
         [PIDGEY]: {
@@ -237,7 +237,7 @@ test.group('calc()', test => {
     t.equal(result.steps[1].inventory[PIDGEY].candies, 1 + 22 - 11 - 12)
     t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
 
-    t.equal(result.totals.duration, 55)
+    t.equal(result.totals.duration, 85)
     t.equal(result.totals.exp, 2000)
   })
 

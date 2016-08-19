@@ -4,9 +4,9 @@ const set = require('101/put')
 const push = require('./helpers').push
 const update = require('./helpers').update
 
-const TRANSFER_DURATION = 10
-const TRANSFER_EVOLVE_DURATION = 30
-const EVOLVE_DURATION = 25
+const TRANSFER_DURATION = 5
+const TRANSFER_EVOLVE_DURATION = 45
+const EVOLVE_DURATION = 40
 
 /**
  * Calculates.
