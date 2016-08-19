@@ -1,5 +1,7 @@
 const pokedex = require('./pokedex')
+const get = require('101/pluck')
 const set = require('101/put')
+const update = require('./helpers').update
 
 const TRANSFER_DURATION = 10
 const TRANSFER_EVOLVE_DURATION = 30
@@ -171,12 +173,12 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, optio
     nextItem = inventory[thisPoke.evolvesTo]
   }
 
-  let candies = thisItem.candies
-  let count = thisItem.count
-  let evolvedCount = (nextItem ? nextItem.count : 0)
   const tnl = thisPoke.candiesToEvolve
 
   while (true) {
+    let candies = get(inventory, `${pokemonId}.candies`)
+    let count = get(inventory, `${pokemonId}.count`)
+    let evolvedCount = get(inventory, `${nextPoke.id}.count`)
     const [pidgeysToTransfer, pidgeottosToTransfer, toEvolve] =
       getMaxTransferable(count, evolvedCount, candies, tnl)
 
@@ -184,11 +186,9 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, optio
 
     // Transfer Pidgettos
     if (pidgeottosToTransfer > 0) {
-      evolvedCount -= pidgeottosToTransfer
-      candies += pidgeottosToTransfer
       inventory = set(inventory, `${nextPoke.id}.id`, nextPoke.id)
-      inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
+      inventory = update(inventory, `${nextPoke.id}.count`, c => c - pidgeottosToTransfer)
+      inventory = update(inventory, `${pokemonId}.candies`, c => c + pidgeottosToTransfer)
 
       newSteps = push(newSteps, {
         action: 'transfer',
@@ -202,10 +202,8 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, optio
 
     // Transfer Pidgeys
     if (pidgeysToTransfer > 0) {
-      count -= pidgeysToTransfer
-      candies += pidgeysToTransfer
-      inventory = set(inventory, `${pokemonId}.count`, count)
-      inventory = set(inventory, `${pokemonId}.candies`, candies)
+      inventory = update(inventory, `${pokemonId}.count`, c => c - pidgeysToTransfer)
+      inventory = update(inventory, `${pokemonId}.candies`, c => c + pidgeysToTransfer)
 
       newSteps = push(newSteps, {
         action: 'transfer',
@@ -217,12 +215,9 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, optio
     }
 
     // Evolve
-    count -= toEvolve
-    evolvedCount += toEvolve
-    candies -= toEvolve * tnl
-    inventory = set(inventory, `${pokemonId}.count`, count)
-    inventory = set(inventory, `${pokemonId}.candies`, candies)
-    inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
+    inventory = update(inventory, `${pokemonId}.count`, c => c - toEvolve)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - toEvolve * tnl)
+    inventory = update(inventory, `${nextPoke.id}.count`, c => c + toEvolve)
     newSteps = push(newSteps, {
       action: 'evolve',
       pokemonId,

@@ -116,7 +116,7 @@ test.group('calc()', test => {
     console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
   })
 
-  test.only('transfer, 25x pidgeys', t => {
+  test('transfer, 25x pidgeys', t => {
     // 25/0
     // transfer(12) => 13/12
     // tevolve(1) => 12/1
@@ -155,7 +155,7 @@ test.group('calc()', test => {
     t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
   })
 
-  test('transfer, 3x pidgey, 25x candies', t => {
+  test.skip('transfer, 3x pidgey, 25x candies', t => {
     const have = {
       pokemon: {
         [PIDGEY]: {
