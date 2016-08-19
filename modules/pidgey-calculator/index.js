@@ -25,15 +25,17 @@ function calc ({pokemon, transfer}) {
     steps: []
   }
 
+  let options = { transfer }
+
   if (!transfer) {
     state = pokedex.evolvables.reduce((state, id) => {
       if (!pokemon[id]) return state
-      return evolveWithoutTransfer(state, { pokemonId: id })
+      return evolveWithoutTransfer(state, { pokemonId: id }, options)
     }, state)
   } else {
     state = pokedex.evolvables.reduce((state, id) => {
       if (!pokemon[id]) return state
-      return evolveWithTransfer(state, { pokemonId: id })
+      return evolveWithTransfer(state, { pokemonId: id }, options)
     }, state)
   }
 
@@ -110,7 +112,7 @@ function evolveWithTransfer({presteps, steps, inventory}, {pokemonId}) {
     if (toEvolve > 1) {
       count -= toEvolve - 1
       candies -= (toEvolve - 1) * (tnl - 1)
-      inventory = set(inventory, `${pokemonId}.count`, candies)
+      inventory = set(inventory, `${pokemonId}.count`, count)
       inventory = set(inventory, `${pokemonId}.candies`, candies)
       newSteps = push(newSteps, {
         action: 'transfer-evolve',
@@ -122,8 +124,10 @@ function evolveWithTransfer({presteps, steps, inventory}, {pokemonId}) {
     }
 
     if (toEvolve > 0) {
+      count -= 1
       candies -= tnl
       evolvedCount += 1
+      inventory = set(inventory, `${pokemonId}.count`, count)
       inventory = set(inventory, `${pokemonId}.candies`, candies)
       inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
       newSteps = push(newSteps, {
@@ -153,7 +157,7 @@ function evolveWithTransfer({presteps, steps, inventory}, {pokemonId}) {
  * Creates a transfer and evolve steps (multiple times).
  */
 
-function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}) {
+function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, options) {
   let newSteps = []
 
   // Find the Pidgey
@@ -247,7 +251,7 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}) {
  *
  * Returns a tuple of `[pidgeysToTransfer, pidgeottosToTransfer, pidgeysToEvolve]`.
  */
-function getMaxTransferable (count, evolvedCount, candies, tnl, options) {
+function getMaxTransferable (count, evolvedCount, candies, tnl, options = {}) {
   let last
 
   for (let i = (evolvedCount + count); i >= 0; i--) {
@@ -259,7 +263,7 @@ function getMaxTransferable (count, evolvedCount, candies, tnl, options) {
     // ${evolvable}, with the least number of ${i}.
     const pidgeys = count - pidgeysToTransfer
     const newCandies = candies + i
-    const evolvable = options && options.transfer
+    const evolvable = options.transfer
       ? Math.min(pidgeys, Math.floor((newCandies - 1) / (tnl - 1)))
       : Math.min(pidgeys, Math.floor(newCandies / tnl))
 

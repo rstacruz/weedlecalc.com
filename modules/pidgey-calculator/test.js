@@ -134,7 +134,25 @@ test.group('calc()', test => {
     }
 
     let result = calc(have)
-    console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
+
+    t.equal(result.presteps[1].action, 'transfer')
+    t.equal(result.presteps[1].pokemonId, PIDGEY)
+    t.equal(result.presteps[1].count, 22)
+    t.equal(result.presteps[1].inventory[PIDGEY].count, 25 - 22)
+    t.equal(result.presteps[1].inventory[PIDGEY].candies, 1 + 22)
+
+    t.equal(result.steps[0].action, 'transfer-evolve')
+    t.equal(result.steps[0].pokemonId, PIDGEY)
+    t.equal(result.steps[0].count, 1)
+    t.equal(result.steps[0].inventory[PIDGEY].count, 25 - 22 - 1)
+    t.equal(result.steps[0].inventory[PIDGEY].candies, 1 + 22 - 11)
+
+    t.equal(result.steps[1].action, 'evolve')
+    t.equal(result.steps[1].pokemonId, PIDGEY)
+    t.equal(result.steps[1].count, 1)
+    t.equal(result.steps[1].inventory[PIDGEY].count, 25 - 22 - 1 - 1)
+    t.equal(result.steps[1].inventory[PIDGEY].candies, 1 + 22 - 11 - 12)
+    t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
   })
 
   test('transfer, 3x pidgey, 25x candies', t => {
