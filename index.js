@@ -22,19 +22,19 @@ function calc ({pokemon}) {
 
 /**
  * evolve:
- * Creates a transfer and evolve step.
+ * Creates a transfer and evolve steps (multiple times).
  */
 
-function evolve (state, {pokemonId}) {
+function evolve ({steps, inventory}, {pokemonId}) {
   // Find the Pidgey
-  const thisItem = state.inventory[pokemonId]
+  const thisItem = inventory[pokemonId]
   const thisPoke = pokedex.data[pokemonId]
 
   // Find the Pidgeotto
   let nextItem, nextPoke
   if (thisPoke.evolvesTo) {
     nextPoke = pokedex.data[thisPoke.evolvesTo]
-    nextItem = state.inventory[thisPoke.evolvesTo]
+    nextItem = inventory[thisPoke.evolvesTo]
   }
 
   let candies = thisItem.candies
@@ -48,38 +48,48 @@ function evolve (state, {pokemonId}) {
 
     if (toEvolve === 0) break
 
-    if (pidgeysToTransfer > 0) {
-      state.steps.push({
-        action: 'transfer',
-        pokemonId,
-        count: pidgeysToTransfer
-      })
-    }
-
+    // Transfer Pidgettos
     if (pidgeottosToTransfer > 0) {
-      state.steps.push({
+      evolvedCount -= pidgeottosToTransfer
+      candies += pidgeottosToTransfer
+      inventory = set(inventory, `${nextPoke.id}.id`, nextPoke.id)
+      inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
+      inventory = set(inventory, `${pokemonId}.candies`, candies)
+
+      steps = push(steps, {
         action: 'transfer',
         pokemonId: nextPoke.id,
-        count: pidgeottosToTransfer
+        count: pidgeottosToTransfer,
+        inventory: inventory
       })
     }
 
-    state.steps.push({ action: 'evolve', pokemonId, count: toEvolve })
+    // Transfer Pidgeys
+    if (pidgeysToTransfer > 0) {
+      count -= pidgeysToTransfer
+      candies += pidgeysToTransfer
+      inventory = set(inventory, `${pokemonId}.count`, count)
+      inventory = set(inventory, `${pokemonId}.candies`, candies)
 
-    count = count - pidgeysToTransfer - toEvolve
-    candies = candies + pidgeysToTransfer + pidgeottosToTransfer - toEvolve * tnl
-    evolvedCount = (nextItem ? nextItem.count : 0) + toEvolve
+      steps = push(steps, {
+        action: 'transfer',
+        pokemonId,
+        count: pidgeysToTransfer,
+        inventory
+      })
+    }
 
-    // Update inventory
-    let inventory = state.inventory
+    // Evolve
+    count -= toEvolve
+    evolvedCount += toEvolve
+    candies -= toEvolve * tnl
     inventory = set(inventory, `${pokemonId}.count`, count)
-    inventory = set(inventory, `${pokemonId}.candies`, count)
-    inventory = set(inventory, `${nextPoke.id}.id`, nextPoke.id)
+    inventory = set(inventory, `${pokemonId}.candies`, candies)
     inventory = set(inventory, `${nextPoke.id}.count`, evolvedCount)
-    state.steps.push({ action: 'remaining', inventory: inventory })
+    steps = push(steps, { action: 'evolve', pokemonId, count: toEvolve, inventory })
   }
 
-  return state
+  return { inventory, steps }
 }
 
 function getMaxTransferable (evolvedCount, count, candies, tnl) {
