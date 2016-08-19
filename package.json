@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify web/index.js -t babelify | uglifyjs -cm > public/script.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd modules/pidgey-calculator && npm test"
   },
   "keywords": [],
   "author": "Rico Sta. Cruz <rico@ricostacruz.com> (http://ricostacruz.com)",
