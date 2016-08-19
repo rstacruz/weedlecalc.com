@@ -30,6 +30,14 @@ body {
   font-size: 16px;
   background: #fafafa;
   color: $text-color;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 }
 
 button {
@@ -43,10 +51,18 @@ summary:active {
 }
 
 .app-root {
-  width: 550px;
+  max-width: 550px;
   margin: 32px auto;
   background: white;
   box-shadow: 0 8px 16px rgba($accent, .2);
+
+  @media (max-width: 768px) {
+    margin: 16px auto;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0;
+  }
 }
 
 .calculator-steps {
@@ -62,8 +78,10 @@ summary:active {
   }
 
   > .meta {
-    float: right;
     color: $primary;
+    display: block;
+    text-align: right;
+    float: right;
   }
 
   > .meta > .exp {
@@ -73,6 +91,13 @@ summary:active {
   > .meta > .duration,
   > .meta > .exp {
     margin-left: 16px;
+  }
+
+  @media (max-width: 768px) {
+    line-height: 1.5;
+    > .step-icon {
+      display: none;
+    }
   }
 }
 
@@ -84,6 +109,10 @@ summary:active {
 
 .calculator-step.-total {
   border-top: solid 1px rgba($accent, .5);
+
+  > .meta {
+    float: right;
+  }
 }
 
 .calculator-step.-total {
@@ -243,14 +272,22 @@ select {
   color: $gray-text;
   margin: 0;
   margin-bottom: 16px;
-  margin-left: 34px + 51px; // Compensate for icon
-  margin-top: -10px; // Move into the icon
+  margin-left: 34px;
   font-size: $small;
   border-top: solid 1px $line-color;
   padding-top: 16px;
 
   > .item {
     margin-right: 16px;
+  }
+
+  margin-top: -8px;
+  padding-top: 12px;
+
+  @media (min-width: 769px) {
+    margin-left: 34px + 51px; // Compensate for icon
+    margin-top: -10px; // Move into the icon
+    padding-top: 16px;
   }
 }
 
