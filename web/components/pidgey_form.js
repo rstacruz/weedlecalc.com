@@ -29,6 +29,7 @@ function onCreate ({setState, path, dispatch}) {
 function render ({state, setState, dispatch, path}) {
   const rowIds = (state && state.rowIds) || {}
   const hasRemove = Object.keys(rowIds).length > 1
+  const update = submit(`${path}-form`, dispatch)
 
   return <div class="pidgey-form">
     <form id={'' + path + '-form'}>
@@ -36,28 +37,30 @@ function render ({state, setState, dispatch, path}) {
         <thead>
           <tr>
             <th class="pokemon"></th>
+            {hasRemove ? <th class="remove"></th> : null}
             <th class="count">Count</th>
             <th class="candies">Candies</th>
-            {hasRemove ? <th class="remove"></th> : null}
           </tr>
         </thead>
         <tbody>
           {Object.keys(rowIds).map((id) =>
             <PidgeyRow id={id}
-              onremove={hasRemove && removeRow(rowIds, setState, id)}
-              onupdate={submit(`${path}-form`, dispatch)} />)}
+              onremove={hasRemove && removeRow(rowIds, setState, id, update)}
+              onupdate={update} />)}
           <tr>
-            <td colspan="4" class="pidgey-table-add">
+            <td colspan="1" class="pidgey-table-add">
               <button onclick={addRow(rowIds, setState)}>Add another</button>
+            </td>
+            <td colspan="3">
+              <label class="checkbox-label">
+                <input type="checkbox" name="transfer" value="1" checked={true}
+                   onchange={submit(`${path}-form`, dispatch)} />
+                <span>Transfer immediately</span>
+              </label>
             </td>
           </tr>
         </tbody>
       </table>
-      <label class="checkbox-label">
-        <input type="checkbox" name="transfer" value="1" checked={true}
-           onchange={submit(`${path}-form`, dispatch)} />
-        <span>Transfer immediately</span>
-      </label>
     </form>
   </div>
 }
@@ -69,10 +72,11 @@ function addRow (rowIds, setState, n) {
   }
 }
 
-function removeRow (rowIds, setState, n) {
+function removeRow (rowIds, setState, n, update) {
   return e => {
     e.preventDefault()
     setState({ rowIds: del(rowIds, n) })
+    setTimeout(() => update(), 1)
   }
 }
 
@@ -113,6 +117,12 @@ function PidgeyRow({props}) {
       </select>
     </td>
 
+    {props.onremove
+      ? <td class="remove">
+        <button onclick={props.onremove} class="remove-button">&times;</button>
+      </td>
+      : null}
+
     <td class="count">
       <input type="text"
         class="form-control"
@@ -126,12 +136,6 @@ function PidgeyRow({props}) {
         name={`pokemon[${id}][candies]`}
         oninput={props.onupdate} />
     </td>
-
-    {props.onremove
-      ? <td class="remove">
-        <button onclick={props.onremove} class="remove-button">&times;</button>
-      </td>
-      : null}
   </tr>
 }
 
