@@ -72,7 +72,8 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
         pokemonId: nextPoke.id,
         unevolvedPokemonId: pokemonId,
         count: pidgeottosToTransfer,
-        inventory: inventory
+        duration: pidgeottosToTransfer * 10,
+        inventory
       })
     }
 
@@ -87,6 +88,7 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
         action: 'transfer',
         pokemonId,
         count: pidgeysToTransfer,
+        duration: pidgeysToTransfer * 10,
         inventory
       })
     }
@@ -103,6 +105,7 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
       pokemonId,
       count: toEvolve,
       exp: toEvolve * 1000,
+      duration: toEvolve * 30,
       inventory
     })
   }

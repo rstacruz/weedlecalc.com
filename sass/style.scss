@@ -1,0 +1,95 @@
+@import '../node_modules/normalize.css/normalize';
+@import '../node_modules/iconfonts/stylesheets/ionicons';
+@import url('https://fonts.googleapis.com/css?family=Roboto:400');
+
+$line-color: rgba(#808099, .1);
+$primary: #7080a0;
+$sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    zoom: 1;
+    clear: both;
+  }
+}
+
+body {
+  font-family: $sans;
+  font-size: 16px;
+}
+
+body {
+  background: #fafafa;
+}
+
+.app-root {
+  width: 500px;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 4px 10px rgba(black, .2);
+}
+
+.calculator-steps {
+  border-top: solid 1px $line-color;
+}
+
+.calculator-step {
+  @include clearfix;
+
+  & {
+    padding: 16px;
+    border-bottom: solid 1px $line-color;
+  }
+
+  > .meta {
+    float: right;
+    color: $primary;
+  }
+
+  > .meta > .duration,
+  > .meta > .exp {
+    margin-left: 16px;
+  }
+}
+
+.pidgey-table {
+  width: 100%;
+  table-layout: fixed;
+
+  > thead > tr,
+  > tbody > tr {
+    > .pokemon {
+      width: 60%;
+    }
+
+    > .count {
+      width: 20%;
+    }
+
+    > .candies {
+      width: 20%;
+    }
+  }
+
+  > * > tr > .count,
+  > * > tr > .candies {
+    > input { width: 100%; }
+  }
+
+  > * > tr > .pokemon > select {
+    width: 100%;
+  }
+}
+
+.pidgey-table-add {
+  > button {
+    background: transparent;
+    outline: 0;
+    padding: 0;
+    border: 0;
+    color: $primary;
+    margin-left: 16px;
+  }
+}
