@@ -59,6 +59,7 @@ function evolve ({steps, inventory}, {pokemonId}) {
       steps = push(steps, {
         action: 'transfer',
         pokemonId: nextPoke.id,
+        unevolvedPokemonId: pokemonId,
         count: pidgeottosToTransfer,
         inventory: inventory
       })
