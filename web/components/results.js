@@ -9,7 +9,9 @@ function Results ({props}) {
   return <div class="calculator-results">
     <div class="calculator-steps">
       {map(result.presteps, step => <ResultStep step={step} />)}
-      <ResultStep step={{action: 'egg'}} />
+      {result.steps.length > 0
+        ? <ResultStep step={{action: 'egg'}} />
+        : null}
       {map(result.steps, step => <ResultStep step={step} />)}
     </div>
   </div>

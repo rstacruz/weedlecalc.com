@@ -19,7 +19,8 @@ function PidgeyForm ({state, setState, dispatch, path}) {
           <th class="candies">Candies</th>
         </thead>
         <tbody>
-          {map(range(count), n => <PidgeyRow id={n} />)}
+          {map(range(count), n =>
+            <PidgeyRow id={n} onupdate={submit(`${path}-form`, dispatch)} />)}
           <tr>
             <td colspan="3" class="pidgey-table-add">
               <button onclick={addRow(count, setState, 1)}>+</button>
@@ -29,7 +30,6 @@ function PidgeyForm ({state, setState, dispatch, path}) {
         </tbody>
       </table>
     </form>
-    <button class='submit-button' onclick={submit(`${path}-form`, dispatch)}>Let's go</button>
   </div>
 }
 
@@ -42,7 +42,7 @@ function addRow (count, setState, n) {
 
 function submit (formId, dispatch) {
   return (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
     const form = document.getElementById(formId)
     const data = formSerialize(form, { hash: true })
 
@@ -63,26 +63,38 @@ function PidgeyRow({props}) {
   const {id} = props
   return <tr class="pidgey-row">
     <td class="pokemon">
-      <select name={`pokemon[${id}][id]`}>
-        <option disabled>Pokemon...</option>
+      <select name={`pokemon[${id}][id]`} onchange={props.onupdate}>
         {pokemonOptions()}
       </select>
     </td>
 
     <td class="count">
-      <input type="number" name={`pokemon[${id}][count]`} />
+      <input type="number"
+        name={`pokemon[${id}][count]`}
+        oninput={props.onupdate} />
     </td>
 
     <td class="candies">
-      <input type="number" name={`pokemon[${id}][candies]`} />
+      <input type="number"
+        name={`pokemon[${id}][candies]`}
+        oninput={props.onupdate} />
     </td>
   </tr>
 }
 
 function pokemonOptions () {
-  return map(pokedex.data, (pokemon, id) =>
-    <option value={id}>{pokemon.name}</option>
-  )
+  const base = map([13, 16, 19], id =>
+    <option value={id}>{pokedex.data[id].name}</option>)
+
+  const evolved = map([14, 17, 20], id =>
+    <option value={id}>{pokedex.data[id].name}</option>)
+
+  return []
+    .concat([<option disabled>Base:</option>])
+    .concat(base)
+    .concat([<option disabled>&mdash;</option>])
+    .concat([<option disabled>Evolved:</option>])
+    .concat(evolved)
 }
 
 export default stateful(PidgeyForm)
