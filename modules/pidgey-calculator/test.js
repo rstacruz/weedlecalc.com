@@ -54,6 +54,9 @@ test.group('calc()', test => {
     t.deepEqual(steps[3].count, 1)
     t.deepEqual(steps[3].inventory[PIDGEY].count, 96 - 83 - 7 - 5 - 1)
     t.deepEqual(steps[3].inventory[PIDGEY].candies, 0)
+
+    t.equal(result.totals.duration, 320)
+    t.equal(result.totals.exp, 8000)
   })
 
   test('1 pidgey, 1 candy', t => {
@@ -94,6 +97,9 @@ test.group('calc()', test => {
     t.equal(result.steps[0].exp, 1000)
     t.equal(result.steps[0].inventory[PIDGEY].count, 0)
     t.equal(result.steps[0].inventory[PIDGEOTTO].count, 1)
+
+    t.equal(result.totals.duration, 25)
+    t.equal(result.totals.exp, 1000)
   })
 
   test.skip('14 pidgeys, 11 pidgeottos, 1 candy', t => {
@@ -136,7 +142,7 @@ test.group('calc()', test => {
     t.equal(result.presteps[1].inventory[PIDGEY].count, 25 - 22)
     t.equal(result.presteps[1].inventory[PIDGEY].candies, 1 + 22)
 
-    t.equal(result.steps[0].action, 'transfer-evolve')
+    t.equal(result.steps[0].action, 'evolve-transfer')
     t.equal(result.steps[0].pokemonId, PIDGEY)
     t.equal(result.steps[0].count, 1)
     t.equal(result.steps[0].inventory[PIDGEY].count, 25 - 22 - 1)
@@ -148,6 +154,9 @@ test.group('calc()', test => {
     t.equal(result.steps[1].inventory[PIDGEY].count, 25 - 22 - 1 - 1)
     t.equal(result.steps[1].inventory[PIDGEY].candies, 1 + 22 - 11 - 12)
     t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
+
+    t.equal(result.totals.duration, 55)
+    t.equal(result.totals.exp, 2000)
   })
 
   test.skip('transfer, 3x pidgey, 25x candies', t => {

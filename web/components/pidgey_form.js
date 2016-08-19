@@ -34,7 +34,7 @@ function render ({state, setState, dispatch, path}) {
         </tbody>
       </table>
       <label class="checkbox-label">
-        <input type="checkbox" name="transfer" value="1"
+        <input type="checkbox" name="transfer" value="1" checked={true}
            onchange={submit(`${path}-form`, dispatch)} />
         <span>Transfer immediately</span>
       </label>

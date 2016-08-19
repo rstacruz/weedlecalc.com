@@ -3,7 +3,9 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
 
 $line-color: rgba(#808099, .1);
+$text-color: #404050;
 $primary: #7080a0;
+$gray-text: $primary;
 $accent: #3498db;
 $sans: 'source sans pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 $small: .86em;
@@ -27,7 +29,7 @@ body {
   font-family: $sans;
   font-size: 16px;
   background: #fafafa;
-  color: #404050;
+  color: $text-color;
 }
 
 button {
@@ -41,14 +43,13 @@ summary:active {
 }
 
 .app-root {
-  width: 500px;
+  width: 550px;
   margin: 32px auto;
   background: white;
   box-shadow: 0 8px 16px rgba($accent, .2);
 }
 
 .calculator-steps {
-  border-top: solid 1px $line-color;
 }
 
 .calculator-step {
@@ -56,7 +57,7 @@ summary:active {
 
   & {
     padding: 16px;
-    border-bottom: solid 1px $line-color;
+    border-top: solid 1px $line-color;
   }
 
   > .meta {
@@ -76,6 +77,19 @@ summary:active {
   &.-egg > .direction {
     color: $accent;
   }
+}
+
+.calculator-step.-egg,
+.calculator-step.-total {
+  border-top: solid 1px rgba($accent, .5);
+
+  // No <details>, so compensate
+  padding-left: 34px;
+}
+
+.calculator-step.-total {
+  background: rgba($primary, .05);
+  font-weight: bold;
 }
 
 .pidgey-form {
@@ -223,5 +237,15 @@ select {
     margin: 0;
     font-size: $small;
     padding: 16px;
+  }
+}
+
+.calculator-details {
+  color: $gray-text;
+  margin: 0 0 16px 34px;
+  font-size: $small;
+
+  > .item {
+    margin-right: 16px;
   }
 }

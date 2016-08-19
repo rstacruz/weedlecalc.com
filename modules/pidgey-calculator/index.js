@@ -35,6 +35,8 @@ function calc ({pokemon, transfer}) {
     return evolve(state, id, options)
   }, state)
 
+  state.totals = getTotals(state.steps)
+
   return state
 }
 
@@ -148,6 +150,7 @@ function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
   steps = push(steps, {
     action: 'evolve',
     pokemonId,
+    nextId,
     count: toEvolve,
     exp: toEvolve * 1000,
     duration: toEvolve * EVOLVE_DURATION,
@@ -167,8 +170,9 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
     inventory = update(inventory, `${pokemonId}.count`, c => c - (toEvolve - 1))
     inventory = update(inventory, `${pokemonId}.candies`, c => c - (toEvolve - 1) * (tnl - 1))
     steps = push(steps, {
-      action: 'transfer-evolve',
+      action: 'evolve-transfer',
       pokemonId,
+      nextId,
       count: toEvolve - 1,
       exp: (toEvolve - 1) * 1000,
       duration: (toEvolve - 1) * TRANSFER_EVOLVE_DURATION,
@@ -183,6 +187,7 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
     steps = push(steps, {
       action: 'evolve',
       pokemonId,
+      nextId,
       count: 1,
       exp: 1000,
       duration: 1 * EVOLVE_DURATION,
@@ -221,6 +226,22 @@ function getMaxTransferable (count, evolvedCount, candies, tnl, options = {}) {
   }
 
   return last
+}
+
+/**
+ * Internal: summarizes totals
+ */
+
+function getTotals (steps) {
+  return (steps || []).reduce((result, step) => {
+    if (step.duration) {
+      result.duration += step.duration
+    }
+    if (step.exp) {
+      result.exp += step.exp
+    }
+    return result
+  }, { duration: 0, exp: 0 })
 }
 
 module.exports = { calc, pokedex }

@@ -32,6 +32,7 @@
     "metalsmith-start": "2.0.1",
     "ms": "0.7.1",
     "normalize.css": "4.2.0",
+    "number-format.js": "1.1.10",
     "pidgey-calculator": "file:modules/pidgey-calculator",
     "redux": "3.5.2",
     "redux-thunk": "2.1.0",
