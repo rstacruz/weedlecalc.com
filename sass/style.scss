@@ -4,6 +4,7 @@
 
 $line-color: rgba(#808099, .1);
 $primary: #7080a0;
+$accent: dodgerblue;
 $sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 
 @mixin clearfix {
@@ -46,6 +47,10 @@ body {
   > .meta {
     float: right;
     color: $primary;
+  }
+
+  > .meta > .exp {
+    color: $accent;
   }
 
   > .meta > .duration,
