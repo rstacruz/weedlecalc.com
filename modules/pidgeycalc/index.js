@@ -3,15 +3,16 @@ const set = require('101/put')
 const each = require('lodash/forEach')
 const reduce = require('lodash/reduce')
 
+/**
+ * Calculates.
+ * Return an object with:
+ *
+ * - `steps` - the steps to do
+ * - `inventory` - final inventory
+ */
+
 function calc ({pokemon}) {
   let steps = []
-  // pidgey: 96x, 1 candies
-  //  -> transfer 88x (=8x =89c)
-  //  -> egg
-  //  -> evolve 7 (=1x =5c)
-  //  -> transfer 7 pidgeot (=12c)
-  //  -> evolve 1 (=0x =0c)
-  //
   let state = {
     inventory: pokemon,
     presteps: [
@@ -57,7 +58,7 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
 
   while (true) {
     const [pidgeysToTransfer, pidgeottosToTransfer, toEvolve] =
-      getMaxTransferable(evolvedCount, count, candies, tnl)
+      getMaxTransferable(count, evolvedCount, candies, tnl)
 
     if (toEvolve === 0) break
 
@@ -104,14 +105,14 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
       action: 'evolve',
       pokemonId,
       count: toEvolve,
-      xp: toEvolve * 1000
+      exp: toEvolve * 1000,
       inventory
     })
   }
 
-  // Put the first transfer as part of pre-egg
+  // Put the first transfer as part of pre-egg steps
+  // TODO: even pidgeotto transfers should count before the egg
   if (newSteps.length > 1 && newSteps[0].action === 'transfer') {
-    // TODO: even pidgeotto transfers should count before the egg
     presteps = presteps.concat(newSteps.slice(0, 1))
     steps = steps.concat(newSteps.slice(1))
   } else {
@@ -121,7 +122,13 @@ function evolve ({presteps, steps, inventory}, {pokemonId}) {
   return { inventory, presteps, steps }
 }
 
-function getMaxTransferable (evolvedCount, count, candies, tnl) {
+/*
+ * Given `evolvedCount` pidgeottos, `count` pidgeys, and `candies`, find out
+ * the best number to evolve.
+ *
+ * Returns a tuple of `[pidgeysToTransfer, pidgeottosToTransfer, pidgeysToEvolve]`.
+ */
+function getMaxTransferable (count, evolvedCount, candies, tnl) {
   let last
 
   for (let i = (evolvedCount + count); i >= 0; i--) {

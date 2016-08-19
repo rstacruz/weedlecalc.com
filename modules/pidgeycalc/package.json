@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test.js"
   },
   "keywords": [],
   "author": "Rico Sta. Cruz <rico@ricostacruz.com> (http://ricostacruz.com)",
   "license": "MIT",
+  "devDependencies": {
+    "tape": "4.6.0",
+    "tape-plus": "1.0.0"
+  },
   "dependencies": {
-    "pidgeycalc": "file:modules/pidgeycalc",
-    "rollup": "0.34.10",
-    "rollup-plugin-buble": "0.13.0",
-    "rollup-plugin-commonjs": "3.3.1"
+    "101": "1.6.1",
+    "lodash": "4.15.0"
   }
 }
