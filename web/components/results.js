@@ -33,7 +33,7 @@ function Results ({props}) {
 
 function ResultTotal ({props}) {
   const {total} = props
-  return <div class="calculator-step -total">
+  return <div class="calculator-step -total" key="total">
     <span class="step-icon -total" />
     <span class="direction">Total:</span>
     <span class="meta">
@@ -63,9 +63,11 @@ function TransferStep ({props}) {
   const {step} = props
   const name = pokedex.data[step.pokemonId].name
 
-  return <details>
+  return <details key={JSON.stringify(step)}>
     <summary class="calculator-step -transfer">
-      <span class="step-icon -transfer" />
+      <span class="step-icon -transfer">
+        <PokemonIcon id={step.pokemonId} />
+      </span>
       <span class="direction">
         Transfer <strong>{step.count}</strong> {plural(step.count, name)}.
       </span>
@@ -82,7 +84,7 @@ function TransferStep ({props}) {
 }
 
 function EggStep ({props}) {
-  return <div class="calculator-step -egg">
+  return <div class="calculator-step -egg" key="egg">
     <span class="step-icon -egg" />
     <span class="direction">
       Activate the lucky egg.
@@ -95,9 +97,11 @@ function EvolveStep ({props}) {
   const name = pokedex.data[step.pokemonId].name
   const id = step.pokemonId
 
-  return <details>
+  return <details key={JSON.stringify(step)}>
     <summary class="calculator-step -evolve">
-      <span class="step-icon -evolve" />
+      <span class="step-icon -evolve">
+        <PokemonIcon id={step.pokemonId} />
+      </span>
       <span class="direction">
         Evolve <strong>{step.count}</strong> {plural(step.count, name)}.
       </span>
@@ -135,9 +139,11 @@ function EvolveTransferStep ({props}) {
   const {step} = props
   const name = pokedex.data[step.pokemonId].name
 
-  return <details>
+  return <details key={JSON.stringify(step)}>
     <summary class="calculator-step -evolve-transfer">
-      <span class="step-icon -evolve-transfer" />
+      <span class="step-icon -evolve-transfer">
+        <PokemonIcon id={step.pokemonId} />
+      </span>
       <span class="direction">
         Evolve <strong>{step.count}</strong> {plural(step.count, name)} and transfer immediately.
       </span>
@@ -164,3 +170,11 @@ function plural (n, str) {
 }
 
 export default Results
+
+function PokemonIcon ({props}) {
+  let {id} = props
+  id = id.toString()
+  if (id.length < 3) id = '0' + id
+
+  return <img src={`/assets/pokemon/${id}.png`} />
+}

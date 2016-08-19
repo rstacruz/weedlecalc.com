@@ -164,8 +164,12 @@ summary:active {
       font-size: $small;
     }
 
+    > .remove {
+      width: 5%;
+    }
+
     > .pokemon {
-      width: 60%;
+      width: 55%;
     }
 
     > .count {
@@ -174,6 +178,14 @@ summary:active {
 
     > .candies {
       width: 20%;
+    }
+  }
+
+  // No remove button on one line
+  &.-single > thead > tr,
+  &.-single > tbody > tr {
+    > .pokemon {
+      width: 60%;
     }
   }
 
@@ -323,17 +335,27 @@ select {
   }
 
   &.-transfer {
-    &::before { @include ion-icon('log-out'); }
+    background: rgba(#eaa, .2);
   }
 
   &.-evolve,
   &.-evolve-transfer {
-    &::before { @include ion-icon('arrow-graph-up-right'); }
-    color: white;
-    background: $accent;
+    background: rgba($accent, .2);
+  }
+
+  > img {
+    position: relative;
+    top: -4px;
   }
 
   &.-total {
     visibility: hidden;
   }
+}
+
+.remove-button {
+  outline: 0;
+  border: 0;
+  background: transparent;
+  color: white;
 }

@@ -5,29 +5,49 @@ import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import stateful from 'deku-stateful'
 import formSerialize from 'form-serialize'
+import set from '101/put'
+import del from '101/del'
 
-function onCreate ({setState}) {
-  setState({ rowIds: [id()] })
+function onCreate ({setState, path, dispatch}) {
+  const ids = [ id(), id() ]
+  setState({ rowIds: { [ids[0]]: true, [ids[1]]: true } })
+
+  // Prefill with demo values.
+  setTimeout(() => {
+    setVal(`#${path}-form [name="pokemon[${ids[0]}][id]"]`, 16)
+    setVal(`#${path}-form [name="pokemon[${ids[1]}][id]"]`, 10)
+    setVal(`#${path}-form [name="pokemon[${ids[0]}][count]"]`, 1)
+    setVal(`#${path}-form [name="pokemon[${ids[0]}][candies]"]`, 12)
+    submit(`${path}-form`, dispatch)()
+  })
+
+  function setVal (selector, value) {
+    document.querySelector(selector).value = value
+  }
 }
 
 function render ({state, setState, dispatch, path}) {
-  const rowIds = (state && state.rowIds) || []
+  const rowIds = (state && state.rowIds) || {}
+  const hasRemove = Object.keys(rowIds).length > 1
 
   return <div class="pidgey-form">
     <form id={'' + path + '-form'}>
-      <table class="pidgey-table">
+      <table class={`pidgey-table ${hasRemove ? '-multi' : '-single'}`}>
         <thead>
           <tr>
             <th class="pokemon"></th>
             <th class="count">Count</th>
             <th class="candies">Candies</th>
+            {hasRemove ? <th class="remove"></th> : null}
           </tr>
         </thead>
         <tbody>
-          {map(rowIds, n =>
-            <PidgeyRow id={n} onupdate={submit(`${path}-form`, dispatch)} />)}
+          {Object.keys(rowIds).map((id) =>
+            <PidgeyRow id={id}
+              onremove={hasRemove && removeRow(rowIds, setState, id)}
+              onupdate={submit(`${path}-form`, dispatch)} />)}
           <tr>
-            <td colspan="3" class="pidgey-table-add">
+            <td colspan="4" class="pidgey-table-add">
               <button onclick={addRow(rowIds, setState)}>Add another</button>
             </td>
           </tr>
@@ -45,7 +65,14 @@ function render ({state, setState, dispatch, path}) {
 function addRow (rowIds, setState, n) {
   return e => {
     e.preventDefault()
-    setState({ rowIds: rowIds.concat([id()]) })
+    setState({ rowIds: set(rowIds, id(), true) })
+  }
+}
+
+function removeRow (rowIds, setState, n) {
+  return e => {
+    e.preventDefault()
+    setState({ rowIds: del(rowIds, n) })
   }
 }
 
@@ -79,7 +106,7 @@ function bool (n) {
 
 function PidgeyRow({props}) {
   const {id} = props
-  return <tr class="pidgey-row">
+  return <tr class="pidgey-row" key={id}>
     <td class="pokemon">
       <select name={`pokemon[${id}][id]`} onchange={props.onupdate}>
         {pokemonOptions()}
@@ -99,6 +126,12 @@ function PidgeyRow({props}) {
         name={`pokemon[${id}][candies]`}
         oninput={props.onupdate} />
     </td>
+
+    {props.onremove
+      ? <td class="remove">
+        <button onclick={props.onremove} class="remove-button">&times;</button>
+      </td>
+      : null}
   </tr>
 }
 
