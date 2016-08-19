@@ -167,12 +167,7 @@ function evolveWithoutTransfer ({presteps, steps, inventory}, {pokemonId}, optio
   const thisPoke = pokedex.data[pokemonId]
 
   // Find the Pidgeotto
-  let nextItem, nextPoke
-  if (thisPoke.evolvesTo) {
-    nextPoke = pokedex.data[thisPoke.evolvesTo]
-    nextItem = inventory[thisPoke.evolvesTo]
-  }
-
+  const nextPoke = thisPoke.evolvesTo && pokedex.data[thisPoke.evolvesTo]
   const tnl = thisPoke.candiesToEvolve
 
   while (true) {
