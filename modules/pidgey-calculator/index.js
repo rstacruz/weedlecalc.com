@@ -1,7 +1,5 @@
 const pokedex = require('./pokedex')
 const set = require('101/put')
-const each = require('lodash/forEach')
-const reduce = require('lodash/reduce')
 
 /**
  * Calculates.
@@ -12,7 +10,6 @@ const reduce = require('lodash/reduce')
  */
 
 function calc ({pokemon}) {
-  let steps = []
   let state = {
     inventory: pokemon,
     presteps: [
@@ -24,7 +21,7 @@ function calc ({pokemon}) {
     steps: []
   }
 
-  state = reduce(pokedex.evolvables, (state, id) => {
+  state = pokedex.evolvables.reduce((state, id) => {
     if (!pokemon[id]) return state
     return evolve(state, { pokemonId: id })
   }, state)
@@ -138,7 +135,6 @@ function getMaxTransferable (count, evolvedCount, candies, tnl) {
     // By transfering ${i} pidgeys and pidgeottos (${pidgeys} left), you
     // can evolve ${evolvable}` Pidgeys. Let's find the maximum number of
     // ${evolvable}, with the least number of ${i}.
-    const pidgeottos = evolvedCount - pidgeottosToTransfer
     const pidgeys = count - pidgeysToTransfer
     const newCandies = candies + i
     const evolvable = Math.min(pidgeys, Math.floor(newCandies / tnl))
@@ -155,4 +151,4 @@ function push (list, item) {
   return list.concat([item])
 }
 
-module.exports = { calc }
+module.exports = { calc, pokedex }
