@@ -2,13 +2,16 @@ import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
 import {calculate} from '../actions'
 import map from 'lodash/map'
-import range from 'lodash/range'
 import reduce from 'lodash/reduce'
 import stateful from 'deku-stateful'
 import formSerialize from 'form-serialize'
 
-function PidgeyForm ({state, setState, dispatch, path}) {
-  const count = (state && state.count) || 1
+function onCreate ({setState}) {
+  setState({ rowIds: [id()] })
+}
+
+function render ({state, setState, dispatch, path}) {
+  const rowIds = (state && state.rowIds) || []
 
   return <div class="pidgey-form">
     <form id={'' + path + '-form'}>
@@ -21,27 +24,28 @@ function PidgeyForm ({state, setState, dispatch, path}) {
           </tr>
         </thead>
         <tbody>
-          {map(range(count), n =>
+          {map(rowIds, n =>
             <PidgeyRow id={n} onupdate={submit(`${path}-form`, dispatch)} />)}
           <tr>
             <td colspan="3" class="pidgey-table-add">
-              <button onclick={addRow(count, setState, 1)}>Add another</button>
+              <button onclick={addRow(rowIds, setState)}>Add another</button>
             </td>
           </tr>
         </tbody>
       </table>
       <label class="checkbox-label">
-        <input type="checkbox" name="transfer" value="1" />
-        <span>Transfer after evolving</span>
+        <input type="checkbox" name="transfer" value="1" checked={true}
+           onchange={submit(`${path}-form`, dispatch)} />
+        <span>Transfer immediately</span>
       </label>
     </form>
   </div>
 }
 
-function addRow (count, setState, n) {
+function addRow (rowIds, setState, n) {
   return e => {
     e.preventDefault()
-    setState({ count: Math.max(count + n, 1) })
+    setState({ rowIds: rowIds.concat([id()]) })
   }
 }
 
@@ -60,13 +64,17 @@ function submit (formId, dispatch) {
       return list
     }, {})
 
-    dispatch(calculate({ pokemon }))
+    dispatch(calculate({ pokemon, transfer: bool(data.transfer) }))
   }
 }
 
 function int (n) {
   const result = +n
   return isNaN(result) ? 0 : result
+}
+
+function bool (n) {
+  return n === "1"
 }
 
 function PidgeyRow({props}) {
@@ -95,10 +103,10 @@ function PidgeyRow({props}) {
 }
 
 function pokemonOptions () {
-  const base = map([10, 13, 16, 19], id =>
+  const base = map([10, 13, 16, 19, 41], id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
-  const evolved = map([11, 14, 17, 20], id =>
+  const evolved = map([11, 14, 17, 20, 42], id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
   return []
@@ -109,4 +117,9 @@ function pokemonOptions () {
     .concat(evolved)
 }
 
-export default stateful(PidgeyForm)
+export default stateful({render, onCreate})
+
+var _id = 0
+function id () {
+  return 'r' + (_id++)
+}
