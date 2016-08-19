@@ -1,5 +1,6 @@
 import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
+import {calculate} from '../actions'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import stateful from 'deku-stateful'
@@ -27,10 +28,10 @@ function submit (formId, dispatch) {
   return (e) => {
     e.preventDefault()
     const form = document.getElementById(formId)
-    let data = formSerialize(form, { hash: true })
+    const data = formSerialize(form, { hash: true })
 
     // It's got the wrong keys, let's fix that. Also let's numerify the strings
-    data = reduce(data.pokemon, (list, pokemon) => {
+    const pokemon = reduce(data.pokemon, (list, pokemon) => {
       const id = +pokemon.id
       const candies = +pokemon.candies
       const count = +pokemon.count
@@ -38,7 +39,7 @@ function submit (formId, dispatch) {
       return list
     }, {})
 
-    console.log(data)
+    dispatch(calculate({ pokemon }))
   }
 }
 

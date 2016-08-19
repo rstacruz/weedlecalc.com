@@ -15,6 +15,7 @@
     "babel-plugin-syntax-jsx": "6.13.0",
     "babel-plugin-transform-react-jsx": "6.8.0",
     "babel-preset-es2015": "6.13.2",
+    "babel-preset-stage-0": "6.5.0",
     "babelify": "7.3.0",
     "browserify": "13.1.0",
     "decca": "2.2.1",
@@ -30,11 +31,13 @@
     "metalsmith-start": "2.0.1",
     "pidgey-calculator": "file:modules/pidgey-calculator",
     "redux": "3.5.2",
+    "redux-thunk": "2.1.0",
     "uglify-js": "2.7.3"
   },
   "babel": {
     "presets": [
-      "es2015"
+      "es2015",
+      "stage-0"
     ],
     "plugins": [
       "syntax-jsx",
