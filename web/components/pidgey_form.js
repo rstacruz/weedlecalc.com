@@ -66,7 +66,7 @@ function submit (formId, dispatch) {
 
 function int (n) {
   const result = +n
-  return isNaN(result) ? 0 : n
+  return isNaN(result) ? 0 : result
 }
 
 function PidgeyRow({props}) {

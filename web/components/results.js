@@ -14,6 +14,10 @@ function Results ({props}) {
         : null}
       {map(result.steps, step => <ResultStep step={step} />)}
     </div>
+    <details class="debug-details">
+      <summary>Debug</summary>
+      <pre>{JSON.stringify(result, null, 2)}</pre>
+    </details>
   </div>
 }
 

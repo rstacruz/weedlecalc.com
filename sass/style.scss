@@ -29,6 +29,16 @@ body {
   background: #fafafa;
 }
 
+button {
+  cursor: pointer;
+}
+
+summary:focus,
+summary:active {
+  outline: 0;
+  cursor: pointer;
+}
+
 .app-root {
   width: 500px;
   margin: 32px auto;
@@ -197,5 +207,20 @@ select {
   > input {
     margin-left: 8px;
     float: right;
+  }
+}
+
+.debug-details {
+  > summary {
+    padding: 16px 16px;
+    font-size: $small;
+    color: $primary;
+    opacity: .5;
+  }
+
+  > pre {
+    margin: 0;
+    font-size: $small;
+    padding: 16px;
   }
 }
