@@ -33,6 +33,7 @@ function Results ({props}) {
 function ResultTotal ({props}) {
   const {total} = props
   return <div class="calculator-step -total">
+    <span class="step-icon -total" />
     <span class="direction">Total:</span>
     <span class="meta">
       <span class="exp">{fmt(total.exp)} EXP</span>
@@ -63,6 +64,7 @@ function TransferStep ({props}) {
 
   return <details>
     <summary class="calculator-step -transfer">
+      <span class="step-icon -transfer" />
       <span class="direction">
         Transfer <strong>{step.count}</strong> {plural(step.count, name)}.
       </span>
@@ -80,6 +82,7 @@ function TransferStep ({props}) {
 
 function EggStep ({props}) {
   return <div class="calculator-step -egg">
+    <span class="step-icon -egg" />
     <span class="direction">
       Activate the lucky egg.
     </span>
@@ -93,6 +96,7 @@ function EvolveStep ({props}) {
 
   return <details>
     <summary class="calculator-step -evolve">
+      <span class="step-icon -evolve" />
       <span class="direction">
         Evolve <strong>{step.count}</strong> {plural(step.count, name)}.
       </span>
@@ -131,7 +135,8 @@ function EvolveTransferStep ({props}) {
   const name = pokedex.data[step.pokemonId].name
 
   return <details>
-    <summary class="calculator-step -evolve">
+    <summary class="calculator-step -evolve-transfer">
+      <span class="step-icon -evolve-transfer" />
       <span class="direction">
         Evolve <strong>{step.count}</strong> {plural(step.count, name)} and transfer immediately.
       </span>
