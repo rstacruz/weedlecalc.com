@@ -63,7 +63,7 @@ function evolve ({presteps, steps, inventory}, pokemonId, options = {}) {
     const [pidgeysToTransfer, pidgeottosToTransfer, toEvolve] =
       getMaxTransferable(count, evolvedCount, candies, tnl, options)
 
-    if (toEvolve === 0) break
+    if (toEvolve <= 0) break
 
     // Transfer Pidgettos
     if (pidgeottosToTransfer > 0) {

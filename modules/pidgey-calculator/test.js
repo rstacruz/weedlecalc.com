@@ -174,4 +174,86 @@ test.group('calc()', test => {
     let result = calc(have)
     console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
   })
+
+  test('zeroes', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 0,
+          candies: 0
+        }
+      }
+    }
+
+    let result = calc(have)
+    t.equal(result.steps.length, 0)
+  })
+
+  test.only('zeroes, transfer', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 0,
+          candies: 0
+        }
+      }
+    }
+
+    let result = calc(have, { transfer: true })
+    t.equal(result.steps.length, 0)
+  })
+  test('transfer, 25x pidgeys', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 25,
+          candies: 1
+        }
+      },
+      transfer: true
+    }
+
+    let result = calc(have)
+
+    t.equal(result.presteps[1].action, 'transfer')
+    t.equal(result.presteps[1].pokemonId, PIDGEY)
+    t.equal(result.presteps[1].count, 22)
+    t.equal(result.presteps[1].inventory[PIDGEY].count, 25 - 22)
+    t.equal(result.presteps[1].inventory[PIDGEY].candies, 1 + 22)
+
+    t.equal(result.steps[0].action, 'evolve-transfer')
+    t.equal(result.steps[0].pokemonId, PIDGEY)
+    t.equal(result.steps[0].count, 1)
+    t.equal(result.steps[0].inventory[PIDGEY].count, 25 - 22 - 1)
+    t.equal(result.steps[0].inventory[PIDGEY].candies, 1 + 22 - 11)
+
+    t.equal(result.steps[1].action, 'evolve')
+    t.equal(result.steps[1].pokemonId, PIDGEY)
+    t.equal(result.steps[1].count, 1)
+    t.equal(result.steps[1].inventory[PIDGEY].count, 25 - 22 - 1 - 1)
+    t.equal(result.steps[1].inventory[PIDGEY].candies, 1 + 22 - 11 - 12)
+    t.equal(result.steps[1].inventory[PIDGEOTTO].count, 1)
+
+    t.equal(result.totals.duration, 55)
+    t.equal(result.totals.exp, 2000)
+  })
+
+  test.skip('transfer, 3x pidgey, 25x candies', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 3,
+          candies: 25
+        }
+      },
+      transfer: true
+    }
+
+    let result = calc(have)
+    console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
+  })
 })
