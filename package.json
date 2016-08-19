@@ -20,6 +20,7 @@
     "browserify": "13.1.0",
     "decca": "2.2.1",
     "deku-stateful": "1.5.0",
+    "details-polyfill": "1.0.2",
     "form-serialize": "0.7.1",
     "iconfonts": "0.9.0",
     "jstransformer-jade": "0.1.1",

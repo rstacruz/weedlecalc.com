@@ -1,3 +1,4 @@
+import _ from 'details-polyfill'
 import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
 import reduce from 'lodash/reduce'
@@ -157,6 +158,7 @@ function EvolveTransferStep ({props}) {
 
 function plural (n, str) {
   if (n === 1) return str
+  if (/ey$/.test(str)) return str.replace(/ey$/, 'ies')
   if (/y$/.test(str)) return str.replace(/y$/, 'ies')
   return str + 's'
 }

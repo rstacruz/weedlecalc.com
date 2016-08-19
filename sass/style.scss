@@ -226,7 +226,7 @@ select {
 
 .debug-details {
   > summary {
-    padding: 16px 16px;
+    padding: 16px;
     font-size: $small;
     color: $primary;
     opacity: .5;
@@ -241,8 +241,13 @@ select {
 
 .calculator-details {
   color: $gray-text;
-  margin: 0 0 16px 34px;
+  margin: 0;
+  margin-bottom: 16px;
+  margin-left: 34px + 51px; // Compensate for icon
+  margin-top: -10px; // Move into the icon
   font-size: $small;
+  border-top: solid 1px $line-color;
+  padding-top: 16px;
 
   > .item {
     margin-right: 16px;
@@ -262,6 +267,7 @@ select {
 
   margin-right: 12px;
   margin-left: 4px;
+
 
   &::before {
     font-size: 18px;
