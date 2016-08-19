@@ -12,7 +12,12 @@ function calc ({pokemon}) {
   //
   let state = {
     inventory: pokemon,
-    steps: []
+    steps: [
+      {
+        action: 'start',
+        inventory: pokemon
+      }
+    ]
   }
 
   state = evolve(state, { pokemonId: 16 })

@@ -1,4 +1,22 @@
 var data = {
+  13: {
+    id: 13,
+    name: 'Weedle',
+    evolvesTo: 14,
+    candiesToEvolve: 12
+  },
+  14: {
+    id: 14,
+    name: 'Kakuna',
+    evolvesFrom: 13,
+    evolvesTo: 15,
+    candiesToEvolve: 50
+  },
+  15: {
+    id: 15,
+    name: 'Beedrill',
+    evolvesFrom: 14
+  },
   16: {
     id: 16,
     name: 'Pidgey',
@@ -30,4 +48,11 @@ var data = {
   }
 }
 
-module.exports = { data }
+/**
+ * evolvables:
+ * Non-evolved pokemon
+ */
+
+const evolvables = [ 13, 16, 19 ]
+
+module.exports = { data, evolvables }
