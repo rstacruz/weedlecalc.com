@@ -1,6 +1,7 @@
 const pokedex = require('./pokedex')
 const get = require('101/pluck')
 const set = require('101/put')
+const push = require('./helpers').push
 const update = require('./helpers').update
 
 const TRANSFER_DURATION = 10
@@ -218,10 +219,6 @@ function getMaxTransferable (count, evolvedCount, candies, tnl, options = {}) {
   }
 
   return last
-}
-
-function push (list, item) {
-  return list.concat([item])
 }
 
 module.exports = { calc, pokedex }

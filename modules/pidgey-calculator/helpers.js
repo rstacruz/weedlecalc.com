@@ -6,4 +6,8 @@ function update (obj, path, fn) {
   return set(obj, path, val)
 }
 
-module.exports = { update }
+function push (list, item) {
+  return list.concat([item])
+}
+
+module.exports = { update, push }
