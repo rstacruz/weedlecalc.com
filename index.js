@@ -1,5 +1,7 @@
 const pokedex = require('./pokedex')
 const set = require('101/put')
+const each = require('lodash/forEach')
+const reduce = require('lodash/reduce')
 
 function calc ({pokemon}) {
   let steps = []
@@ -21,7 +23,10 @@ function calc ({pokemon}) {
     steps: []
   }
 
-  state = evolve(state, { pokemonId: 16 })
+  state = reduce(pokedex.evolvables, (state, id) => {
+    if (!pokemon[id]) return state
+    return evolve(state, { pokemonId: id })
+  }, state)
 
   return state
 }
