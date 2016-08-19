@@ -1,11 +1,9 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
 import { dom, element } from 'decca'
 import App from './components/app'
 
-function buildStore (middleware) {
+function buildStore () {
   var enhancer = compose(
-    applyMiddleware(thunk, ...(middleware || [])),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )
   return createStore(reducer, {}, enhancer)

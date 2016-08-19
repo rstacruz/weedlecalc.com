@@ -25,7 +25,6 @@
     "iconfonts": "0.9.0",
     "jstransformer-jade": "0.1.1",
     "jstransformer-markdown-it": "0.2.3",
-    "lodash": "4.15.0",
     "metalsmith": "2.2.0",
     "metalsmith-browserify": "0.1.0",
     "metalsmith-jstransformer": "0.7.1",
@@ -35,8 +34,8 @@
     "number-format.js": "1.1.10",
     "pidgey-calculator": "file:modules/pidgey-calculator",
     "redux": "3.5.2",
-    "redux-thunk": "2.1.0",
-    "uglify-js": "2.7.3"
+    "uglify-js": "2.7.3",
+    "uglifyify": "3.0.2"
   },
   "babel": {
     "presets": [

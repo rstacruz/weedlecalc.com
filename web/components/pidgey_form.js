@@ -1,8 +1,6 @@
 import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
 import {calculate} from '../actions'
-import map from 'lodash/map'
-import reduce from 'lodash/reduce'
 import stateful from 'deku-stateful'
 import formSerialize from 'form-serialize'
 import set from '101/put'
@@ -36,10 +34,10 @@ function render ({state, setState, dispatch, path}) {
       <table class={`pidgey-table ${hasRemove ? '-multi' : '-single'}`}>
         <thead>
           <tr>
-            <th class="pokemon"></th>
-            {hasRemove ? <th class="remove"></th> : null}
-            <th class="count">Count</th>
-            <th class="candies">Candies</th>
+            <th class="pokemon" key="pokemon"></th>
+            {hasRemove ? <th class="remove" key="remove"></th> : null}
+            <th class="count" key="count">Count</th>
+            <th class="candies" key="candies">Candies</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +85,8 @@ function submit (formId, dispatch) {
     const data = formSerialize(form, { hash: true })
 
     // It's got the wrong keys, let's fix that. Also let's numerify the strings
-    const pokemon = reduce(data.pokemon, (list, pokemon) => {
+    const pokemon = Object.keys(data.pokemon).reduce((list, dataId) => {
+      const pokemon = data.pokemon[dataId]
       const id = int(pokemon.id)
       const candies = int(pokemon.candies)
       const count = int(pokemon.count)
@@ -111,26 +110,26 @@ function bool (n) {
 function PidgeyRow({props}) {
   const {id} = props
   return <tr class="pidgey-row" key={id}>
-    <td class="pokemon">
+    <td class="pokemon" key="pokemon">
       <select name={`pokemon[${id}][id]`} onchange={props.onupdate}>
         {pokemonOptions()}
       </select>
     </td>
 
     {props.onremove
-      ? <td class="remove">
+      ? <td class="remove" key="remove">
         <button onclick={props.onremove} class="remove-button">&times;</button>
       </td>
       : null}
 
-    <td class="count">
+    <td class="count" key="count">
       <input type="text"
         class="form-control"
         name={`pokemon[${id}][count]`}
         oninput={props.onupdate} />
     </td>
 
-    <td class="candies">
+    <td class="candies" key="candies">
       <input type="text"
         class="form-control"
         name={`pokemon[${id}][candies]`}
@@ -140,10 +139,10 @@ function PidgeyRow({props}) {
 }
 
 function pokemonOptions () {
-  const base = map([10, 13, 16, 19, 21, 41], id =>
+  const base = [10, 13, 16, 19, 21, 41].map(id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
-  const evolved = map([11, 14, 17, 20, 22, 42], id =>
+  const evolved = [11, 14, 17, 20, 22, 42].map(id =>
     <option value={id}>{pokedex.data[id].name}</option>)
 
   return []

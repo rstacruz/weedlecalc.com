@@ -1,8 +1,6 @@
 import _ from 'details-polyfill'
 import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
-import reduce from 'lodash/reduce'
-import map from 'lodash/map'
 import numberFormat from 'number-format.js'
 import ms from '../helpers/ms'
 
@@ -13,11 +11,11 @@ function Results ({props}) {
 
   return <div class="calculator-results">
     <div class="calculator-steps">
-      {map(result.presteps, step => <ResultStep step={step} />)}
+      {result.presteps.map(step => <ResultStep step={step} />)}
       {result.steps.length > 0
         ? <ResultStep step={{action: 'egg'}} />
         : null}
-      {map(result.steps, step => <ResultStep step={step} />)}
+      {result.steps.map(step => <ResultStep step={step} />)}
       {result.totals && result.totals.duration > 0
         ? <ResultTotal total={result.totals} />
         : null}
