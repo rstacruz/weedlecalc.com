@@ -16,10 +16,10 @@ function Results ({props}) {
         ? <ResultStep step={{action: 'egg'}} />
         : null}
       {result.steps.map(step => <ResultStep step={step} />)}
-      {result.totals && result.totals.duration > 0
-        ? <ResultTotal total={result.totals} />
-        : null}
     </div>
+    {result.totals && result.totals.duration > 0
+      ? <ResultTotal total={result.totals} />
+      : <noscript />}
     {window.location.search.indexOf('debug') > -1
       ? <details class="debug-details">
         <summary>Debug</summary>
@@ -144,7 +144,7 @@ function EvolveTransferStep ({props}) {
         <PokemonIcon id={step.pokemonId} />
       </span>
       <span class="direction">
-        Evolve <strong>{step.count}</strong> {plural(step.count, name)} and transfer immediately.
+        Evolve <strong>{step.count}</strong> {plural(step.count, name)} and transfer<span class="_nomobile"> immediately</span>.
       </span>
       <span class="meta">
         <span class="exp">{fmt(step.exp)} EXP</span>

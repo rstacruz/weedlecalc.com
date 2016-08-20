@@ -1,0 +1,59 @@
+.step-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+  line-height: 32px - 4px;
+  text-align: center;
+  background: rgba($accent, .1);
+  color: $accent;
+  border-radius: 50%;
+
+  margin-right: 12px;
+  margin-left: 4px;
+
+
+  &::before {
+    font-size: 18px;
+  }
+
+  &.-egg {
+    &::before { @include ion-icon('egg'); }
+    color: white;
+    background: #9c27b0;
+  }
+
+  &.-transfer {
+    background: rgba(#eaa, .2);
+  }
+
+  &.-evolve,
+  &.-evolve-transfer {
+    background: rgba($accent, .2);
+  }
+
+  > img {
+    position: relative;
+    top: -4px;
+  }
+
+  &.-total {
+    visibility: hidden;
+  }
+
+  @media (max-width: 480px) {
+    height: 20px;
+    width: 20px;
+    line-height: 20px - 4px;
+    margin-right: 8px;
+
+    &::before {
+      font-size: 12px;
+    }
+
+    > img {
+      top: -10px;
+      left: -6px;
+    }
+  }
+}

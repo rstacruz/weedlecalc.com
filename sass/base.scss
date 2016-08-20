@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $sans;
+  font-size: 16px;
+  background: #fafafa;
+  color: $text-color;
+
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+summary:focus,
+summary:active {
+  outline: 0;
+  cursor: pointer;
+}
+
