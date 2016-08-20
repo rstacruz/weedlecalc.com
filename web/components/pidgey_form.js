@@ -68,6 +68,8 @@ function removeRow (rowIds, dispatch, id) {
 function PidgeyRow ({props, dispatch}) {
   let {id} = props
   let value = props.value || {}
+  let pokemon = pokedex.data[value.id]
+  let hasCandies = pokemon && !pokemon.evolvesFrom
 
   return <tr class="pidgey-row" key={id}>
     <td class="pokemon" key="pokemon">
@@ -92,11 +94,13 @@ function PidgeyRow ({props, dispatch}) {
     </td>
 
     <td class="candies" key="candies">
-      <input type="text"
-        class="form-control"
-        name={`pokemon[${id}][candies]`}
-        value={value.candies}
-        oninput={saveForm(dispatch)} />
+      {hasCandies
+        ? <input type="text"
+            class="form-control"
+            name={`pokemon[${id}][candies]`}
+            value={value.candies}
+            oninput={saveForm(dispatch)} />
+        : null }
     </td>
   </tr>
 }
