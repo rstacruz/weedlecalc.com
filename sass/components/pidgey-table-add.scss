@@ -14,6 +14,7 @@
     color: lighten($accent, 20%);
     height: 32px;
     line-height: 32px;
+    position: relative;
   }
 
   > button:hover,
@@ -25,5 +26,9 @@
     @include ion-icon('ios-plus-outline', 24px);
     color: white;
     margin-right: 8px;
+  }
+
+  > button::after {
+    @include hit-area(16px);
   }
 }

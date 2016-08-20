@@ -5,6 +5,11 @@
   display: block;
   user-select: none;
   cursor: pointer;
+  position: relative;
+
+  &::before {
+    @include hit-area(16px);
+  }
 
   > input {
     margin-left: 8px;
