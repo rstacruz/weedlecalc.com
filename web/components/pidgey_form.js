@@ -121,7 +121,7 @@ function saveForm (dispatch) {
       : e.target.value
 
     // Numerify
-    if (typeof value === 'string' && !isNaN(+value)) {
+    if (typeof value === 'string' && !isNaN(+value) && value) {
       value = +value
     }
 
