@@ -1,0 +1,14 @@
+.debug-details {
+  > summary {
+    padding: 16px;
+    font-size: $small;
+    color: $primary;
+    opacity: .5;
+  }
+
+  > pre {
+    margin: 0;
+    font-size: $small;
+    padding: 16px;
+  }
+}

@@ -1,33 +1,15 @@
 import {element} from 'decca'
 import {pokedex} from '../../modules/pidgey-calculator'
-import {calculate} from '../actions'
-import stateful from 'deku-stateful'
-import formSerialize from 'form-serialize'
+import {recalculate, calculate} from '../actions'
 import set from '101/put'
 import del from '101/del'
+import getId from '../helpers/get_id'
 
-function onCreate ({setState, path, dispatch}) {
-  const ids = [ id(), id() ]
-  setState({ rowIds: { [ids[0]]: true, [ids[1]]: true } })
-
-  // Prefill with demo values.
-  setTimeout(() => {
-    setVal(`#${path}-form [name="pokemon[${ids[0]}][id]"]`, 16)
-    setVal(`#${path}-form [name="pokemon[${ids[1]}][id]"]`, 10)
-    setVal(`#${path}-form [name="pokemon[${ids[0]}][count]"]`, 1)
-    setVal(`#${path}-form [name="pokemon[${ids[0]}][candies]"]`, 12)
-    submit(`${path}-form`, dispatch)()
-  })
-
-  function setVal (selector, value) {
-    document.querySelector(selector).value = value
-  }
-}
-
-function render ({state, setState, dispatch, path}) {
-  const rowIds = (state && state.rowIds) || {}
+function PidgeyForm ({dispatch, context, path}) {
+  const form = context.form || {}
+  const rowIds = form.pokemon || {}
   const hasRemove = Object.keys(rowIds).length > 1
-  const update = submit(`${path}-form`, dispatch)
+  const update = () => null
 
   return <div class="pidgey-form">
     <form id={'' + path + '-form'}>
@@ -43,16 +25,17 @@ function render ({state, setState, dispatch, path}) {
         <tbody>
           {Object.keys(rowIds).map((id) =>
             <PidgeyRow id={id}
-              onremove={hasRemove && removeRow(rowIds, setState, id, update)}
-              onupdate={update} />)}
+              value={rowIds[id]}
+              onremove={hasRemove && removeRow(rowIds, dispatch, id)} />)}
           <tr>
             <td colspan="1" class="pidgey-table-add">
-              <button onclick={addRow(rowIds, setState)}>Add another</button>
+              <button onclick={addRow(rowIds, dispatch)}>Add another</button>
             </td>
             <td colspan="3">
               <label class="checkbox-label">
-                <input type="checkbox" name="transfer" value="1" checked={true}
-                   onchange={submit(`${path}-form`, dispatch)} />
+                <input type="checkbox" name="transfer" value="1"
+                   checked={form.transfer}
+                   onchange={saveForm(dispatch)} />
                 <span>Transfer immediately</span>
               </label>
             </td>
@@ -63,56 +46,34 @@ function render ({state, setState, dispatch, path}) {
   </div>
 }
 
-function addRow (rowIds, setState, n) {
+function addRow (rowIds, dispatch) {
   return e => {
     e.preventDefault()
-    setState({ rowIds: set(rowIds, id(), true) })
+    dispatch({
+      type: 'form:set',
+      key: `pokemon.${getId()}`,
+      value: { id: null, candies: "0", count: "0" }
+    })
   }
 }
 
-function removeRow (rowIds, setState, n, update) {
+function removeRow (rowIds, dispatch, id) {
   return e => {
     e.preventDefault()
-    setState({ rowIds: del(rowIds, n) })
-    setTimeout(() => update(), 1)
+    dispatch({ type: 'form:delete', key: `pokemon.${id}` })
+    dispatch(recalculate())
   }
 }
 
-function submit (formId, dispatch) {
-  return (e) => {
-    if (e) e.preventDefault()
-    const form = document.getElementById(formId)
-    const data = formSerialize(form, { hash: true })
+function PidgeyRow ({props, dispatch}) {
+  let {id} = props
+  let value = props.value || {}
 
-    // It's got the wrong keys, let's fix that. Also let's numerify the strings
-    const pokemon = Object.keys(data.pokemon).reduce((list, dataId) => {
-      const pokemon = data.pokemon[dataId]
-      const id = int(pokemon.id)
-      const candies = int(pokemon.candies)
-      const count = int(pokemon.count)
-      list[id] = { id, candies, count }
-      return list
-    }, {})
-
-    dispatch(calculate({ pokemon, transfer: bool(data.transfer) }))
-  }
-}
-
-function int (n) {
-  const result = +n
-  return isNaN(result) ? 0 : result
-}
-
-function bool (n) {
-  return n === "1"
-}
-
-function PidgeyRow({props}) {
-  const {id} = props
   return <tr class="pidgey-row" key={id}>
     <td class="pokemon" key="pokemon">
-      <select name={`pokemon[${id}][id]`} onchange={props.onupdate}>
-        {pokemonOptions()}
+      <select name={`pokemon[${id}][id]`}
+        onchange={saveForm(dispatch)}>
+        {pokemonOptions(value.id)}
       </select>
     </td>
 
@@ -126,26 +87,51 @@ function PidgeyRow({props}) {
       <input type="text"
         class="form-control"
         name={`pokemon[${id}][count]`}
-        oninput={props.onupdate} />
+        value={value.count}
+        oninput={saveForm(dispatch)} />
     </td>
 
     <td class="candies" key="candies">
       <input type="text"
         class="form-control"
         name={`pokemon[${id}][candies]`}
-        oninput={props.onupdate} />
+        value={value.candies}
+        oninput={saveForm(dispatch)} />
     </td>
   </tr>
 }
 
-function pokemonOptions () {
+function saveForm (dispatch) {
+  return e => {
+    e.preventDefault()
+
+    let name = e.target.getAttribute('name')
+    let type = e.target.getAttribute('type')
+    let key = name.replace(/\[([^\]]+)\]/g, '.$1')
+
+    let value = type === 'checkbox'
+      ? e.target.checked
+      : e.target.value
+
+    // Numerify
+    if (typeof value === 'string' && !isNaN(+value)) {
+      value = +value
+    }
+
+    dispatch({ type: 'form:set', key, value })
+    dispatch(recalculate())
+  }
+}
+
+function pokemonOptions (selected) {
   const base = [10, 13, 16, 19, 21, 41].map(id =>
-    <option value={id}>{pokedex.data[id].name}</option>)
+    <option value={id} selected={id === +selected}>{pokedex.data[id].name}</option>)
 
   const evolved = [11, 14, 17, 20, 22, 42].map(id =>
-    <option value={id}>{pokedex.data[id].name}</option>)
+    <option value={id} selected={id === +selected}>{pokedex.data[id].name}</option>)
 
   return []
+    .concat([<option>Select Pokemon...</option>])
     .concat([<option disabled>Base:</option>])
     .concat(base)
     .concat([<option disabled></option>])
@@ -153,9 +139,4 @@ function pokemonOptions () {
     .concat(evolved)
 }
 
-export default stateful({render, onCreate})
-
-var _id = 0
-function id () {
-  return 'r' + (_id++)
-}
+export default PidgeyForm
