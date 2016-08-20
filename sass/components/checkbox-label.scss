@@ -4,9 +4,15 @@
   text-align: right;
   display: block;
   user-select: none;
+  cursor: pointer;
 
   > input {
     margin-left: 8px;
     float: right;
+  }
+
+  &:hover,
+  &:focus {
+    color: white;
   }
 }

@@ -20,6 +20,18 @@ $small: .86em;
   }
 }
 
+@mixin hit-area ($top: 16px, $right: $top, $bottom: $top, $left: $right) {
+  content: '';
+  position: absolute;
+  top: -$top;
+  right: -$right;
+  bottom: -$bottom;
+  left: -$left;
+  background: transparent;
+  display: block;
+  cursor: pointer;
+}
+
 @include ion-font;
 @import './base';
 @import './components/app-root';
@@ -28,23 +40,10 @@ $small: .86em;
 @import './components/checkbox-label';
 @import './components/debug-details';
 @import './components/form-control';
+@import './components/hint';
 @import './components/pidgey-form';
 @import './components/pidgey-table';
 @import './components/pidgey-table-add';
 @import './components/step-icon';
 @import './components/remove-button';
 @import './helpers';
-
-[class*="hint--"]:after {
-  box-shadow: none;
-  text-shadow: none;
-  border-radius: 3px;
-  text-align: left;
-}
-
-@media (max-width: 768px) {
-  [class*="hint--"]:before,
-  [class*="hint--"]:after {
-    display: none;
-  }
-}

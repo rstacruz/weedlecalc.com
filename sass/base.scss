@@ -17,9 +17,8 @@ body {
   }
 }
 
-// Happens on Firefox mobile
 html, body {
-  overflow-x: hidden;
+  cursor: default;
 }
 
 button {
@@ -32,3 +31,8 @@ summary:active {
   cursor: pointer;
 }
 
+// No spin buttons, but up-down arrow keys work
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}

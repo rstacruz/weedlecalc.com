@@ -3,4 +3,16 @@
   border: 0;
   background: transparent;
   color: white;
+  position: relative;
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+
+  &:hover {
+    background: rgba(black, .1);
+  }
+
+  &::before {
+    @include hit-area(16px, 12px);
+  }
 }

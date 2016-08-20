@@ -94,7 +94,7 @@ function PidgeyRow ({props, dispatch}) {
 
     <td class="count" key="count">
       {hasCount
-        ? <input type="text"
+        ? <input type="number"
           class="form-control"
           name={`pokemon[${id}][count]`}
           value={value.count}
@@ -104,7 +104,7 @@ function PidgeyRow ({props, dispatch}) {
 
     <td class="candies" key="candies">
       {hasCandies
-        ? <input type="text"
+        ? <input type="number"
             class="form-control"
             name={`pokemon[${id}][candies]`}
             value={value.candies}
