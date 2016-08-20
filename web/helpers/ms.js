@@ -1,4 +1,4 @@
-function ms (n) {
+export default function (n) {
   var result = []
   var mins = Math.floor(n / 60000)
   n -= mins * 60000
@@ -10,5 +10,3 @@ function ms (n) {
 
   return result.join(' ')
 }
-
-module.exports = ms

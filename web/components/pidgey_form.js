@@ -4,6 +4,7 @@ import {recalculate, calculate} from '../actions'
 import set from '101/put'
 import del from '101/del'
 import getId from '../helpers/get_id'
+import getKeyValue from '../helpers/get_key_value';
 
 function PidgeyForm ({dispatch, context, path}) {
   const form = context.form || {}
@@ -36,7 +37,12 @@ function PidgeyForm ({dispatch, context, path}) {
                 <input type="checkbox" name="transfer" value="1"
                    checked={form.transfer}
                    onchange={saveForm(dispatch)} />
-                <span>Transfer immediately</span>
+                <span
+                  class="hint--bottom hint--large"
+                  attributes={{
+                    'aria-label': 'Transfer your Pidgeottos right after evolving them from Pidgeys. Yields more candies, but may take more time.'
+                  }}
+                  >Transfer immediately</span>
               </label>
             </td>
           </tr>
@@ -111,20 +117,7 @@ function PidgeyRow ({props, dispatch}) {
 function saveForm (dispatch) {
   return e => {
     e.preventDefault()
-
-    let name = e.target.getAttribute('name')
-    let type = e.target.getAttribute('type')
-    let key = name.replace(/\[([^\]]+)\]/g, '.$1')
-
-    let value = type === 'checkbox'
-      ? e.target.checked
-      : e.target.value
-
-    // Numerify
-    if (typeof value === 'string' && !isNaN(+value) && value) {
-      value = +value
-    }
-
+    let [key, value] = getKeyValue(e)
     dispatch({ type: 'form:set', key, value })
     dispatch(recalculate())
   }

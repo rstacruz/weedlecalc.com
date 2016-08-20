@@ -1,5 +1,6 @@
 @import '../node_modules/normalize.css/normalize';
 @import '../node_modules/iconfonts/stylesheets/ionicons';
+@import '../node_modules/hint.css/hint';
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
 
 $line-color: rgba(#808099, .1);
@@ -33,3 +34,10 @@ $small: .86em;
 @import './components/step-icon';
 @import './components/remove-button';
 @import './helpers';
+
+[class*="hint--"]:after {
+  box-shadow: none;
+  text-shadow: none;
+  border-radius: 3px;
+  text-align: left;
+}

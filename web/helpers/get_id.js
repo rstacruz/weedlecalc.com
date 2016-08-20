@@ -1,7 +1,5 @@
 var _id = 0
 
-function getId () {
+export default function () {
   return 'r' + (_id++)
 }
-
-module.exports = getId
