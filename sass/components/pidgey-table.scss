@@ -1,0 +1,66 @@
+.pidgey-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  > thead > tr,
+  > tbody > tr {
+    > th, > td {
+      padding: 0;
+      margin: 0;
+      padding-right: 8px;
+    }
+
+    > td {
+      border-top: solid 1px rgba(white, .1);
+      padding-top: 8px;
+      padding-bottom: 8px;
+      height: 26px + 16px;
+    }
+
+    > th:last-child,
+    > td:last-child {
+      padding-right: 0;
+    }
+
+    > th {
+      font-weight: normal;
+      text-align: right;
+      padding-bottom: 8px;
+      font-size: $small;
+    }
+
+    > .remove {
+      width: 5%;
+    }
+
+    > .pokemon {
+      width: 55%;
+    }
+
+    > .count {
+      width: 20%;
+    }
+
+    > .candies {
+      width: 20%;
+    }
+  }
+
+  // No remove button on one line
+  &.-single > thead > tr,
+  &.-single > tbody > tr {
+    > .pokemon {
+      width: 60%;
+    }
+  }
+
+  > * > tr > .count,
+  > * > tr > .candies {
+    > input { width: 100%; }
+  }
+
+  > * > tr > .pokemon > select {
+    width: 100%;
+  }
+}

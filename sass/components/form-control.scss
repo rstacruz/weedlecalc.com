@@ -1,0 +1,29 @@
+.form-control {
+  background: transparent;
+  border: 0;
+  padding: 0 8px;
+  background: rgba(black, .1);
+  border-radius: 2px;
+
+  height: 24px;
+  line-height: 24px;
+  color: white;
+  text-align: right;
+  font-size: $small;
+
+  &:focus,
+  &:active {
+    outline: 0;
+  }
+
+  &:focus {
+    background: rgba(white, .1);
+  }
+}
+
+select {
+  background: transparent;
+  border: 0;
+  color: white;
+  font-weight: bold;
+}

@@ -1,0 +1,29 @@
+.pidgey-table-add {
+  > button {
+    cursor: pointer;
+    text-align: left;
+    font-size: $small;
+    background: transparent;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 3px;
+    outline: 0;
+    padding: 0 8px;
+    border: 0;
+    color: lighten($accent, 20%);
+    height: 32px;
+    line-height: 32px;
+  }
+
+  > button:hover,
+  > button:focus {
+    color: white;
+  }
+
+  > button::before {
+    @include ion-icon('ios-plus-outline', 24px);
+    color: white;
+    margin-right: 8px;
+  }
+}
