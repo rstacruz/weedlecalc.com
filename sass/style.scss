@@ -43,6 +43,7 @@ $small: .86em;
 }
 
 @media (max-width: 768px) {
+  [class*="hint--"]:before,
   [class*="hint--"]:after {
     display: none;
   }
