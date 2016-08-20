@@ -99,6 +99,7 @@ function PidgeyRow ({props, dispatch}) {
           class="form-control"
           name={`pokemon[${id}][count]`}
           value={value.count}
+          onfocus={selectAllText}
           oninput={saveForm(dispatch)} />
         : null}
     </td>
@@ -109,6 +110,7 @@ function PidgeyRow ({props, dispatch}) {
             class="form-control"
             name={`pokemon[${id}][candies]`}
             value={value.candies}
+          onfocus={selectAllText}
             oninput={saveForm(dispatch)} />
         : null }
     </td>
@@ -138,6 +140,10 @@ function pokemonOptions (selected) {
     .concat([<option disabled></option>])
     .concat([<option disabled>Evolved:</option>])
     .concat(evolved)
+}
+
+function selectAllText (e) {
+  e.target.select()
 }
 
 export default PidgeyForm
