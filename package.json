@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "browserify web/index.js -t babelify | uglifyjs -cm > public/script.js",
+    "build": "node metalsmith.js",
+    "deploy": "make deploy",
     "start": "metalsmith-start",
     "test": "cd modules/pidgey-calculator && npm test"
   },
@@ -51,5 +52,8 @@
         }
       ]
     ]
+  },
+  "devDependencies": {
+    "git-update-ghpages": "1.3.0"
   }
 }
