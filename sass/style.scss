@@ -41,3 +41,9 @@ $small: .86em;
   border-radius: 3px;
   text-align: left;
 }
+
+@media (max-width: 768px) {
+  [class*="hint--"]:after {
+    display: none;
+  }
+}
