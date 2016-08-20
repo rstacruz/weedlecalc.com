@@ -70,6 +70,7 @@ function PidgeyRow ({props, dispatch}) {
   let value = props.value || {}
   let pokemon = pokedex.data[value.id]
   let hasCandies = pokemon && !pokemon.evolvesFrom
+  let hasCount = pokemon
 
   return <tr class="pidgey-row" key={id}>
     <td class="pokemon" key="pokemon">
@@ -86,11 +87,13 @@ function PidgeyRow ({props, dispatch}) {
       : null}
 
     <td class="count" key="count">
-      <input type="text"
-        class="form-control"
-        name={`pokemon[${id}][count]`}
-        value={value.count}
-        oninput={saveForm(dispatch)} />
+      {hasCount
+        ? <input type="text"
+          class="form-control"
+          name={`pokemon[${id}][count]`}
+          value={value.count}
+          oninput={saveForm(dispatch)} />
+        : null}
     </td>
 
     <td class="candies" key="candies">
