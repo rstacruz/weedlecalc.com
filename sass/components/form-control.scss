@@ -26,4 +26,14 @@ select {
   border: 0;
   color: white;
   font-weight: bold;
+
+  &[data-selected=""] {
+    font-weight: normal;
+    color: rgba(white, .5);
+  }
+
+  &:hover,
+  &:focus {
+    color: white;
+  }
 }

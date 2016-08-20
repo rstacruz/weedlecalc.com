@@ -81,6 +81,7 @@ function PidgeyRow ({props, dispatch}) {
   return <tr class="pidgey-row" key={id}>
     <td class="pokemon" key="pokemon">
       <select name={`pokemon[${id}][id]`}
+        attributes={{'data-selected': value.id || ""}}
         onchange={saveForm(dispatch)}>
         {pokemonOptions(value.id)}
       </select>
@@ -131,7 +132,7 @@ function pokemonOptions (selected) {
     <option value={id} selected={id === +selected}>{pokedex.data[id].name}</option>)
 
   return []
-    .concat([<option>Select Pokemon...</option>])
+    .concat([<option value="">Select Pokemon...</option>])
     .concat([<option disabled>Base:</option>])
     .concat(base)
     .concat([<option disabled></option>])
