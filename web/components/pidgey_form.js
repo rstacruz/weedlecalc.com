@@ -135,11 +135,8 @@ function pokemonOptions (selected) {
 
   return []
     .concat([<option value="">Select Pokemon...</option>])
-    .concat([<option disabled>Base:</option>])
-    .concat(base)
-    .concat([<option disabled></option>])
-    .concat([<option disabled>Evolved:</option>])
-    .concat(evolved)
+    .concat(element('optgroup', {label: 'Base'}, ...base))
+    .concat(element('optgroup', {label: 'Evolved'}, ...evolved))
 }
 
 function selectAllText (e) {
