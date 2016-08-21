@@ -30,9 +30,9 @@ function PidgeyForm ({dispatch, context, path}) {
               onremove={hasRemove && removeRow(rowIds, dispatch, id)} />)}
           <tr>
             <td colspan="1" class="pidgey-table-add">
-              <button onclick={addRow(rowIds, dispatch)}>Add another</button>
+              <button onclick={addRow(rowIds, dispatch)}>Add another Pokemon</button>
             </td>
-            <td colspan="3">
+            <td colspan="3" class="pidgey-table-add">
               <label class="checkbox-label">
                 <input type="checkbox" name="transfer" value="1"
                    checked={form.transfer}
