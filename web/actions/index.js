@@ -23,8 +23,6 @@ export function demoValues () {
     dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 13 })
     id = getId()
     dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 19 })
-    id = getId()
-    dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 41 })
     dispatch(recalculate())
   }
 }
