@@ -40,7 +40,7 @@ function PidgeyForm ({dispatch, context, path}) {
                 <span
                   class="hint--bottom hint--large"
                   attributes={{
-                    'aria-label': 'Transfer your Pidgeottos right after evolving them from Pidgeys (if necessary). Yields more leftover Pidgeottos/candies, but may take more time.'
+                    'aria-label': 'Transfer your Pidgeottos right after evolving them from Pidgeys (if necessary). Yields more leftover Pidgeys/Pidgeottos/candies, but may take more time. Turning this off also gives you a chance to inspect for any Pidgeottos you\'d like to keep.'
                   }}
                   >Transfer immediately</span>
               </label>
