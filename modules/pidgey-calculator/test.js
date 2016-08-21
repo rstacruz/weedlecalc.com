@@ -256,4 +256,23 @@ test.group('calc()', test => {
     let result = calc(have)
     console.log('result:', require('util').inspect(result, { depth: null, colors: true }))
   })
+
+  test('spare test', t => {
+    const have = {
+      pokemon: {
+        [PIDGEY]: {
+          id: PIDGEY,
+          count: 20,
+          candies: 235
+        }
+      },
+      transfer: true
+    }
+
+    let result = calc(have)
+    t.equal(result.steps[0].action, 'evolve-transfer')
+    t.equal(result.steps[0].count, 5)
+    t.equal(result.steps[1].action, 'evolve')
+    t.equal(result.steps[1].count, 15)
+  })
 })

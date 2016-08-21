@@ -165,32 +165,36 @@ function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
  */
 
 function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
-  // Evolve
-  if (toEvolve > 1) {
-    inventory = update(inventory, `${pokemonId}.count`, c => c - (toEvolve - 1))
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - (toEvolve - 1) * (tnl - 1))
+  const candies = inventory[pokemonId].candies
+  const toSpare = Math.min(candies - toEvolve * (tnl - 1), toEvolve)
+  const toTransfer = toEvolve - toSpare
+
+  // Transfer-evolve
+  if (toTransfer > 0) {
+    inventory = update(inventory, `${pokemonId}.count`, c => c - (toTransfer))
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - (toTransfer) * (tnl - 1))
     steps = push(steps, {
       action: 'evolve-transfer',
       pokemonId,
       nextId,
-      count: toEvolve - 1,
-      exp: (toEvolve - 1) * 1000,
-      duration: (toEvolve - 1) * TRANSFER_EVOLVE_DURATION,
+      count: toTransfer,
+      exp: toTransfer * 1000,
+      duration: toTransfer * TRANSFER_EVOLVE_DURATION,
       inventory
     })
   }
 
-  if (toEvolve > 0) {
-    inventory = update(inventory, `${pokemonId}.count`, c => c - 1)
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - tnl)
-    inventory = update(inventory, `${nextId}.count`, c => c + 1)
+  if (toSpare > 0) {
+    inventory = update(inventory, `${pokemonId}.count`, c => c - toSpare)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - toSpare * tnl)
+    inventory = update(inventory, `${nextId}.count`, c => c + toSpare)
     steps = push(steps, {
       action: 'evolve',
       pokemonId,
       nextId,
-      count: 1,
-      exp: 1000,
-      duration: 1 * EVOLVE_DURATION,
+      count: toSpare,
+      exp: toSpare * 1000,
+      duration: toSpare * EVOLVE_DURATION,
       inventory
     })
   }
