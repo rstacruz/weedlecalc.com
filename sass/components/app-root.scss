@@ -63,6 +63,8 @@
     font-size: 1.2em * 1.2 * 1.2 * 1.2;
     color: $black;
     margin-bottom: 0;
+    text-align: center;
+    color: $accent2;
   }
 
   @media (max-width: 480px) {
@@ -79,6 +81,25 @@
   ol > li {
     margin-left: 1em;
     padding-left: 1em;
+  }
+}
+
+.top-icon {
+  text-align: center;
+  display: block;
+  color: $accent2;
+
+  &:before {
+    @include ion-icon('egg');
+    font-size: 96px;
+
+    @media (max-width: 768px) {
+      font-size: 72px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 48px;
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 @import '../node_modules/normalize.css/normalize';
 @import '../node_modules/iconfonts/stylesheets/ionicons';
 @import '../node_modules/hint.css/hint';
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700');
 
 $line-color: rgba(#808099, .1);
 $black: #111;
@@ -9,6 +9,7 @@ $text-color: #404050;
 $primary: #7080a0;
 $gray-text: $primary;
 $accent: #3498db;
+$accent2: #00bcd4;
 $sans: 'source sans pro', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 $small: .86em;
 
