@@ -6994,12 +6994,6 @@ exports.demoValues = demoValues;
 exports.recalculate = recalculate;
 exports.saveFormState = saveFormState;
 
-var _pidgeyCalculator = require('../../modules/pidgey-calculator');
-
-var _get_id = require('../helpers/get_id');
-
-var _get_id2 = _interopRequireDefault(_get_id);
-
 var _pluck = require('101/pluck');
 
 var _pluck2 = _interopRequireDefault(_pluck);
@@ -7008,9 +7002,13 @@ var _put = require('101/put');
 
 var _put2 = _interopRequireDefault(_put);
 
-var _compress_form = require('../helpers/compress_form');
+var _pidgeyCalculator = require('../../modules/pidgey-calculator');
 
-var _compress_form2 = _interopRequireDefault(_compress_form);
+var _get_id = require('../helpers/get_id');
+
+var _get_id2 = _interopRequireDefault(_get_id);
+
+var _persistence = require('../helpers/persistence');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7061,17 +7059,12 @@ function recalculate() {
 }
 
 /*
- * Saves the form state into the URL.
+ * Saves the form state into local storage.
  */
 
 function saveFormState() {
   return function (dispatch, getState) {
-    var _getState = getState();
-
-    var form = _getState.form;
-
-    var data = 'J:' + _compress_form2.default.stringify(form);
-    window.history.replaceState({}, '', '#' + data);
+    (0, _persistence.saveToStorage)(getState().form);
   };
 }
 
@@ -7084,7 +7077,7 @@ function bool(n) {
   return n === "1";
 }
 
-},{"../../modules/pidgey-calculator":3,"../helpers/compress_form":98,"../helpers/get_id":99,"101/pluck":22,"101/put":23}],95:[function(require,module,exports){
+},{"../../modules/pidgey-calculator":3,"../helpers/get_id":99,"../helpers/persistence":102,"101/pluck":22,"101/put":23}],95:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7793,6 +7786,54 @@ exports.default = function (n) {
 },{}],102:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fromURL = fromURL;
+exports.fromStorage = fromStorage;
+exports.saveToStorage = saveToStorage;
+exports.saveToURL = saveToURL;
+exports.defaultState = defaultState;
+
+var _compress_form = require('./compress_form');
+
+var _compress_form2 = _interopRequireDefault(_compress_form);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function fromURL() {
+  if (window.location.hash.substr(0, 3) !== '#J:') return;
+  return _compress_form2.default.parse(window.location.hash.substr(3));
+}
+
+function fromStorage() {
+  if (window.localStorage.weedlecalcForm) {
+    return JSON.parse(window.localStorage.weedlecalcForm);
+  }
+}
+
+function saveToStorage(data) {
+  window.localStorage.weedlecalcForm = JSON.stringify(data);
+}
+
+function saveToURL(data) {
+  window.history.replaceState({}, '', '#J:' + _compress_form2.default.stringify(data));
+}
+
+function defaultState() {
+  return {
+    transfer: true,
+    pokemon: {
+      r0: { id: 16, count: 22, candies: 168 },
+      r1: { id: 13 },
+      r2: { id: 19 }
+    }
+  };
+}
+
+},{"./compress_form":98}],103:[function(require,module,exports){
+'use strict';
+
 var _redux = require('redux');
 
 var _reduxThunk = require('redux-thunk');
@@ -7819,9 +7860,7 @@ var _qs2 = _interopRequireDefault(_qs);
 
 var _actions = require('./actions');
 
-var _compress_form = require('./helpers/compress_form');
-
-var _compress_form2 = _interopRequireDefault(_compress_form);
+var _persistence = require('./helpers/persistence');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7862,17 +7901,9 @@ function update() {
 store.subscribe(update);
 update();
 
-var formState = void 0;
-if (formState = fetchSavedState()) {
-  store.dispatch({ type: 'form:load', payload: formState });
-  store.dispatch((0, _actions.recalculate)());
-} else {
-  store.dispatch((0, _actions.demoValues)());
-}
+var formState = (0, _persistence.fromURL)() || (0, _persistence.fromStorage)() || (0, _persistence.defaultState)();
 
-function fetchSavedState() {
-  if (window.location.hash.substr(0, 3) !== '#J:') return;
-  return _compress_form2.default.parse(window.location.hash.substr(3));
-}
+store.dispatch({ type: 'form:load', payload: formState });
+store.dispatch((0, _actions.recalculate)());
 
-},{"./actions":94,"./components/app":95,"./helpers/compress_form":98,"101/del":15,"101/put":23,"decca":34,"qs":53,"redux":63,"redux-thunk":57}]},{},[102]);
+},{"./actions":94,"./components/app":95,"./helpers/persistence":102,"101/del":15,"101/put":23,"decca":34,"qs":53,"redux":63,"redux-thunk":57}]},{},[103]);
