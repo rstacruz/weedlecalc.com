@@ -12,11 +12,25 @@ export function fromStorage () {
 }
 
 export function saveToStorage (data) {
-  window.localStorage.weedlecalcForm = JSON.stringify(data)
+  // If it's the same as the default state, there's no sense in
+  // saving it.
+  if (JSON.stringify(data) === JSON.stringify(defaultState())) {
+    delete window.localStorage.weedlecalcForm
+  } else {
+    window.localStorage.weedlecalcForm = JSON.stringify(data)
+  }
 }
 
 export function saveToURL (data) {
   window.history.replaceState({}, '', '#J:' + PokeJSON.stringify(data))
+}
+
+export function getSaveURL (data) {
+  return window.location.protocol + '//'
+    + window.location.host
+    + window.location.pathname
+    + window.location.search
+    + '#J:' + PokeJSON.stringify(data)
 }
 
 export function defaultState () {

@@ -46,6 +46,7 @@
     "uglifyify": "3.0.2"
   },
   "devDependencies": {
+    "deku-stateful": "1.5.0",
     "git-update-ghpages": "1.3.0"
   },
   "keywords": [],

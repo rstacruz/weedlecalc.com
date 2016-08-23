@@ -1,15 +1,23 @@
 import {element} from 'decca'
 import PidgeyForm from './pidgey_form'
 import Results from './results'
-import {saveFormState} from '../actions'
+import SaveForLater from './save_for_later'
 
 function App ({props, context, dispatch}) {
   return <div class="app-root">
-    <PidgeyForm />
+    <div class='fixed'>
+      <PidgeyForm />
+    </div>
 
-     {context.result
-       ? <Results result={context && context.result} />
-       : null}
+    <div class='grow'>
+       {context.result
+         ? <Results result={context && context.result} />
+         : null}
+    </div>
+
+    <div class='fixed'>
+      <SaveForLater />
+    </div>
   </div>
 }
 

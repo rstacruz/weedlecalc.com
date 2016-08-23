@@ -13,21 +13,6 @@ export function calculate (input) {
   }
 }
 
-export function demoValues () {
-  return dispatch => {
-    let id = getId()
-    dispatch({ type: 'form:set', key: `transfer`, value: true })
-    dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 16 })
-    dispatch({ type: 'form:set', key: `pokemon.${id}.count`, value: 22 })
-    dispatch({ type: 'form:set', key: `pokemon.${id}.candies`, value: 168 })
-    id = getId()
-    dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 13 })
-    id = getId()
-    dispatch({ type: 'form:set', key: `pokemon.${id}.id`, value: 19 })
-    dispatch(recalculate())
-  }
-}
-
 export function recalculate () {
   return (dispatch, getState) => {
     const state = getState()

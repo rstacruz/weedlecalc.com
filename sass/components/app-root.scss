@@ -106,6 +106,16 @@
 .app-root {
   background: white;
   box-shadow: 0 8px 16px rgba($accent, .2);
+  display: flex;
+  flex-direction: column;
+
+  > .fixed {
+    flex: 1 0 1px;
+  }
+
+  > .grow {
+    flex: 5 1 100%;
+  }
 }
 
 .pidgey-form {
