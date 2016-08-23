@@ -37,8 +37,8 @@ export function defaultState () {
   return {
     transfer: true,
     pokemon: {
-      0: { id: 16, count: 22, candies: 168 },
-      1: { id: 13 },
+      0: { id: 13 },
+      1: { id: 16, count: 22, candies: 168 },
       2: { id: 19 }
     }
   }
