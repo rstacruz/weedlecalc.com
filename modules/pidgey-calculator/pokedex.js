@@ -68,7 +68,7 @@ var data = {
     id: 21,
     name: 'Spearow',
     evolvesTo: 22,
-    candiesToEvolve: 25
+    candiesToEvolve: 50
   },
   22: {
     id: 22,
