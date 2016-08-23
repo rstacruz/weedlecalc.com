@@ -1,8 +1,8 @@
-import { calc } from '../../modules/pidgey-calculator'
-import getId from '../helpers/get_id'
 import get from '101/pluck'
 import set from '101/put'
-import PokeJSON from '../helpers/compress_form'
+import { calc } from '../../modules/pidgey-calculator'
+import getId from '../helpers/get_id'
+import { saveToStorage } from '../helpers/persistence'
 
 export function calculate (input) {
   try {
@@ -51,14 +51,12 @@ export function recalculate () {
 }
 
 /*
- * Saves the form state into the URL.
+ * Saves the form state into local storage.
  */
 
 export function saveFormState () {
   return (dispatch, getState) => {
-    const {form} = getState()
-    let data = 'J:' + PokeJSON.stringify(form)
-    window.history.replaceState({}, '', `#${data}`)
+    saveToStorage(getState().form)
   }
 }
 

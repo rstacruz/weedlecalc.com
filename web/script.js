@@ -5,8 +5,8 @@ import set from '101/put'
 import del from '101/del'
 import App from './components/app'
 import qs from 'qs'
-import { recalculate, demoValues } from './actions'
-import PokeJSON from './helpers/compress_form'
+import { recalculate } from './actions'
+import { fromURL, fromStorage, defaultState } from './helpers/persistence'
 
 function buildStore () {
   var enhancer = compose(
@@ -46,15 +46,9 @@ function update () {
 store.subscribe(update)
 update()
 
-let formState
-if ((formState = fetchSavedState())) {
-  store.dispatch({ type: 'form:load', payload: formState })
-  store.dispatch(recalculate())
-} else {
-  store.dispatch(demoValues())
-}
+let formState = fromURL() ||
+  fromStorage() ||
+  defaultState()
 
-function fetchSavedState () {
-  if (window.location.hash.substr(0, 3) !== '#J:') return
-  return PokeJSON.parse(window.location.hash.substr(3))
-}
+store.dispatch({ type: 'form:load', payload: formState })
+store.dispatch(recalculate())
