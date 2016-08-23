@@ -39,6 +39,7 @@
     "normalize.css": "4.2.0",
     "number-format.js": "1.1.10",
     "pidgey-calculator": "file:modules/pidgey-calculator",
+    "qs": "6.2.1",
     "redux": "3.5.2",
     "redux-thunk": "2.1.0",
     "uglify-js": "2.7.3",

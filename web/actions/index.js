@@ -2,6 +2,7 @@ import { calc } from '../../modules/pidgey-calculator'
 import getId from '../helpers/get_id'
 import get from '101/pluck'
 import set from '101/put'
+import PokeJSON from '../helpers/compress_form'
 
 export function calculate (input) {
   try {
@@ -44,7 +45,20 @@ export function recalculate () {
 
     form = set(form, 'pokemon', pokemon)
 
+    dispatch(saveFormState())
     dispatch(calculate(form))
+  }
+}
+
+/*
+ * Saves the form state into the URL.
+ */
+
+export function saveFormState () {
+  return (dispatch, getState) => {
+    const {form} = getState()
+    let data = 'J:' + PokeJSON.stringify(form)
+    window.history.replaceState({}, '', `#${data}`)
   }
 }
 

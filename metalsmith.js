@@ -2,7 +2,10 @@ var Metalsmith = require('metalsmith')
 
 var b = require('metalsmith-browserify')('js/script.js', ['web/script.js'])
 b.bundle.transform('babelify')
-b.bundle.transform({ global: true }, require('uglifyify'))
+
+if (process.env.NODE_ENV === 'production') {
+  b.bundle.transform({ global: true }, require('uglifyify'))
+}
 
 var app = Metalsmith(__dirname)
   .source('./src')

@@ -4,7 +4,9 @@ import { dom, element } from 'decca'
 import set from '101/put'
 import del from '101/del'
 import App from './components/app'
-import { demoValues } from './actions'
+import qs from 'qs'
+import { recalculate, demoValues } from './actions'
+import PokeJSON from './helpers/compress_form'
 
 function buildStore () {
   var enhancer = compose(
@@ -25,6 +27,9 @@ function reducer (state, action) {
     case 'form:set':
       return set(state, `form.${action.key}`, action.value)
 
+    case 'form:load':
+      return set(state, `form`, action.payload)
+
     case 'form:delete':
       return del(state, `form.${action.key}`)
 
@@ -41,5 +46,15 @@ function update () {
 store.subscribe(update)
 update()
 
+let formState
+if ((formState = fetchSavedState())) {
+  store.dispatch({ type: 'form:load', payload: formState })
+  store.dispatch(recalculate())
+} else {
+  store.dispatch(demoValues())
+}
 
-store.dispatch(demoValues())
+function fetchSavedState () {
+  if (window.location.hash.substr(0, 3) !== '#J:') return
+  return PokeJSON.parse(window.location.hash.substr(3))
+}
