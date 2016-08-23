@@ -7142,10 +7142,6 @@ var _put2 = _interopRequireDefault(_put);
 
 var _pidgeyCalculator = require('../../modules/pidgey-calculator');
 
-var _get_id = require('../helpers/get_id');
-
-var _get_id2 = _interopRequireDefault(_get_id);
-
 var _persistence = require('../helpers/persistence');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7200,7 +7196,7 @@ function bool(n) {
   return n === "1";
 }
 
-},{"../../modules/pidgey-calculator":3,"../helpers/get_id":103,"../helpers/persistence":106,"101/pluck":22,"101/put":23}],98:[function(require,module,exports){
+},{"../../modules/pidgey-calculator":3,"../helpers/persistence":106,"101/pluck":22,"101/put":23}],98:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7274,13 +7270,13 @@ var _del = require('101/del');
 
 var _del2 = _interopRequireDefault(_del);
 
-var _get_id = require('../helpers/get_id');
-
-var _get_id2 = _interopRequireDefault(_get_id);
-
 var _get_key_value = require('../helpers/get_key_value');
 
 var _get_key_value2 = _interopRequireDefault(_get_key_value);
+
+var _next_id = require('../helpers/next_id');
+
+var _next_id2 = _interopRequireDefault(_next_id);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7380,7 +7376,7 @@ function addRow(rowIds, dispatch) {
     e.preventDefault();
     dispatch({
       type: 'form:set',
-      key: 'pokemon.' + (0, _get_id2.default)(),
+      key: 'pokemon.' + (0, _next_id2.default)(rowIds),
       value: { id: null, candies: "0", count: "0" }
     });
   };
@@ -7496,7 +7492,7 @@ function selectAllText(e) {
 
 exports.default = PidgeyForm;
 
-},{"../../modules/pidgey-calculator":3,"../actions":97,"../helpers/get_id":103,"../helpers/get_key_value":104,"101/del":15,"101/put":23,"decca":34}],100:[function(require,module,exports){
+},{"../../modules/pidgey-calculator":3,"../actions":97,"../helpers/get_key_value":103,"../helpers/next_id":105,"101/del":15,"101/put":23,"decca":34}],100:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7846,7 +7842,7 @@ function PokemonIcon(_ref9) {
   return (0, _decca.element)('img', { src: '/assets/pokemon/' + id + '.png' });
 }
 
-},{"../../modules/pidgey-calculator":3,"../helpers/ms":105,"decca":34,"details-polyfill":39,"number-format.js":53}],101:[function(require,module,exports){
+},{"../../modules/pidgey-calculator":3,"../helpers/ms":104,"decca":34,"details-polyfill":39,"number-format.js":53}],101:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7946,19 +7942,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function () {
-  return 'r' + _id++;
-};
-
-var _id = 0;
-
-},{}],104:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 exports.default = function (e) {
   var name = e.target.getAttribute('name');
   var type = e.target.getAttribute('type');
@@ -7974,7 +7957,7 @@ exports.default = function (e) {
   return [key, value];
 };
 
-},{}],105:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7992,6 +7975,19 @@ exports.default = function (n) {
   if (secs != 0) result.push('' + secs + 's');
 
   return result.join(' ');
+};
+
+},{}],105:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (rows) {
+  var keys = Object.keys(rows);
+  var lastId = keys.length ? keys[keys.length - 1] : -1;
+  return +lastId + 1;
 };
 
 },{}],106:[function(require,module,exports){
@@ -8046,9 +8042,9 @@ function defaultState() {
   return {
     transfer: true,
     pokemon: {
-      r0: { id: 16, count: 22, candies: 168 },
-      r1: { id: 13 },
-      r2: { id: 19 }
+      0: { id: 16, count: 22, candies: 168 },
+      1: { id: 13 },
+      2: { id: 19 }
     }
   };
 }
