@@ -1,7 +1,6 @@
 import get from '101/pluck'
 import set from '101/put'
 import { calc } from '../../modules/pidgey-calculator'
-import getId from '../helpers/get_id'
 import { saveToStorage } from '../helpers/persistence'
 
 export function calculate (input) {

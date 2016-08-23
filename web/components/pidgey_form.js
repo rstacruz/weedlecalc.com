@@ -3,8 +3,8 @@ import {pokedex} from '../../modules/pidgey-calculator'
 import {recalculate, calculate} from '../actions'
 import set from '101/put'
 import del from '101/del'
-import getId from '../helpers/get_id'
-import getKeyValue from '../helpers/get_key_value';
+import getKeyValue from '../helpers/get_key_value'
+import nextId from '../helpers/next_id'
 
 function PidgeyForm ({dispatch, context, path}) {
   const form = context.form || {}
@@ -57,7 +57,7 @@ function addRow (rowIds, dispatch) {
     e.preventDefault()
     dispatch({
       type: 'form:set',
-      key: `pokemon.${getId()}`,
+      key: `pokemon.${nextId(rowIds)}`,
       value: { id: null, candies: "0", count: "0" }
     })
   }
