@@ -1,8 +1,8 @@
-import { condenseByKeys, expandByKeys } from '../../modules/json-condenser'
+import { condense, expand } from '../../modules/json-condenser'
 
-const KEYS = ['pokemon', 'id', 'count', 'candies', 'transfer']
+const KEYS = [null, true, false, undefined, 'pokemon', 'id', 'count', 'candies', 'transfer']
 
 export default {
-  stringify: data => condenseByKeys(KEYS, JSON.stringify(data)),
-  parse: str => JSON.parse(expandByKeys(KEYS, str))
+  stringify: data => condense(KEYS, JSON.stringify(data)),
+  parse: str => JSON.parse(expand(KEYS, str))
 }
