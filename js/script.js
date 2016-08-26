@@ -7219,7 +7219,7 @@ var _save_for_later2 = _interopRequireDefault(_save_for_later);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function App(_ref) {
+function AppRoot(_ref) {
   var props = _ref.props;
   var context = _ref.context;
   var dispatch = _ref.dispatch;
@@ -7245,7 +7245,7 @@ function App(_ref) {
   );
 }
 
-exports.default = App;
+exports.default = AppRoot;
 
 },{"./pidgey_form":99,"./results":100,"./save_for_later":101,"decca":34}],99:[function(require,module,exports){
 'use strict';
@@ -8068,9 +8068,9 @@ var _del = require('101/del');
 
 var _del2 = _interopRequireDefault(_del);
 
-var _app = require('./components/app');
+var _app_root = require('./components/app_root');
 
-var _app2 = _interopRequireDefault(_app);
+var _app_root2 = _interopRequireDefault(_app_root);
 
 var _qs = require('qs');
 
@@ -8114,7 +8114,7 @@ function reducer(state, action) {
 var store = buildStore();
 var render = _decca.dom.createRenderer(document.getElementById('app'), store.dispatch);
 function update() {
-  render((0, _decca.element)(_app2.default, null), store.getState());
+  render((0, _decca.element)(_app_root2.default, null), store.getState());
 }
 store.subscribe(update);
 update();
@@ -8124,4 +8124,4 @@ var formState = (0, _persistence.fromURL)() || (0, _persistence.fromStorage)() |
 store.dispatch({ type: 'form:load', payload: formState });
 store.dispatch((0, _actions.recalculate)());
 
-},{"./actions":97,"./components/app":98,"./helpers/persistence":106,"101/del":15,"101/put":23,"decca":34,"qs":55,"redux":65,"redux-thunk":59}]},{},[107]);
+},{"./actions":97,"./components/app_root":98,"./helpers/persistence":106,"101/del":15,"101/put":23,"decca":34,"qs":55,"redux":65,"redux-thunk":59}]},{},[107]);
