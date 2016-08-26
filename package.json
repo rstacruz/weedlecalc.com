@@ -29,6 +29,7 @@
     "details-polyfill": "1.0.2",
     "hint.css": "2.3.2",
     "iconfonts": "0.9.0",
+    "json-condenser": "1.0.0",
     "jstransformer-jade": "0.1.1",
     "jstransformer-markdown-it": "0.2.3",
     "metalsmith": "2.2.0",
