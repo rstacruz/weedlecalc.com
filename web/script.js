@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import { dom, element } from 'decca'
 import set from '101/put'
 import del from '101/del'
-import App from './components/app'
+import AppRoot from './components/app_root'
 import qs from 'qs'
 import { recalculate } from './actions'
 import { fromURL, fromStorage, defaultState } from './helpers/persistence'
@@ -41,7 +41,7 @@ function reducer (state, action) {
 const store = buildStore()
 const render = dom.createRenderer(document.getElementById('app'), store.dispatch)
 function update () {
-  render(<App />, store.getState())
+  render(<AppRoot />, store.getState())
 }
 store.subscribe(update)
 update()

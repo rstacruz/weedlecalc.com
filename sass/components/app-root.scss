@@ -1,3 +1,18 @@
+.app-root {
+  background: white;
+  box-shadow: 0 8px 16px rgba($accent, .2);
+  display: flex;
+  flex-direction: column;
+
+  > .fixed {
+    flex: 0 0 auto;
+  }
+
+  > .grow {
+    flex: 1 0 auto;
+  }
+}
+
 .top-layout {
   @media (min-width: 900px) {
     & {
@@ -100,21 +115,6 @@
     @media (max-width: 480px) {
       font-size: 48px;
     }
-  }
-}
-
-.app-root {
-  background: white;
-  box-shadow: 0 8px 16px rgba($accent, .2);
-  display: flex;
-  flex-direction: column;
-
-  > .fixed {
-    flex: 1 0 1px;
-  }
-
-  > .grow {
-    flex: 5 1 100%;
   }
 }
 

@@ -3,7 +3,7 @@ import PidgeyForm from './pidgey_form'
 import Results from './results'
 import SaveForLater from './save_for_later'
 
-function App ({props, context, dispatch}) {
+function AppRoot ({props, context, dispatch}) {
   return <div class="app-root">
     <div class='fixed'>
       <PidgeyForm />
@@ -21,4 +21,4 @@ function App ({props, context, dispatch}) {
   </div>
 }
 
-export default App
+export default AppRoot
