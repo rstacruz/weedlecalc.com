@@ -175,5 +175,5 @@ function PokemonIcon ({props}) {
   id = id.toString()
   if (id.length < 3) id = '0' + id
 
-  return <img src={`/assets/pokemon/${id}.png`} />
+  return <img src={`/images/pokemon/${id}.png`} />
 }
