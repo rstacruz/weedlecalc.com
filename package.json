@@ -40,6 +40,7 @@
     "metalsmith-start": "2.0.1",
     "metalsmith-uglifyjs": "github:rstacruz/metalsmith-uglifyjs#patch-1",
     "normalize.css": "4.2.0",
+    "npm-run-all": "3.0.0",
     "number-format.js": "1.1.10",
     "pidgey-calculator": "file:modules/pidgey-calculator",
     "qs": "6.2.1",
@@ -59,7 +60,8 @@
   "private": "true",
   "scripts": {
     "build": "env NODE_ENV=production node metalsmith.js",
-    "deploy": "make deploy",
+    "deploy": "run-s build deploy:deploy",
+    "deploy:deploy": "git-update-ghpages rstacruz/weedlecalc.com public -b gh-pages",
     "start": "metalsmith-start",
     "test": "cd modules/pidgey-calculator && npm test"
   }

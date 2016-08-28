@@ -1,5 +1,5 @@
 deploy:
-	node metalsmith.js
+	npm run build
 	./node_modules/.bin/git-update-ghpages rstacruz/weedlecalc.com public -b gh-pages
 
 images:
