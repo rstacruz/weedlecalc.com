@@ -1,6 +1,6 @@
 import _ from 'details-polyfill'
 import {element} from 'decca'
-import {pokedex} from '../../modules/pidgey-calculator'
+import {pokedex} from '../../../modules/pidgey-calculator'
 import numberFormat from 'number-format.js'
 import ms from '../helpers/ms'
 

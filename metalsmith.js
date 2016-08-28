@@ -1,13 +1,13 @@
 var Metalsmith = require('metalsmith')
 
 var app = Metalsmith(__dirname)
-  .source('./src')
+  .source('./web/assets')
   .destination('./public')
   .use(require('metalsmith-jstransformer')())
   .use(require('metalsmith-sense-sass')())
   .use(browserify({
     output: 'app.js',
-    input: ['web/app.js'],
+    input: ['web/js/app.js'],
     transform: ['babelify'],
     plugin: process.env.NODE_ENV === 'development' ? ['watchify'] : []
   }))
@@ -48,4 +48,3 @@ function browserify (options) {
 
   return b
 }
-

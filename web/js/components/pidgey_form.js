@@ -1,5 +1,5 @@
 import {element} from 'decca'
-import {pokedex} from '../../modules/pidgey-calculator'
+import {pokedex} from '../../../modules/pidgey-calculator'
 import {recalculate, calculate} from '../actions'
 import set from '101/put'
 import del from '101/del'
