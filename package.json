@@ -34,7 +34,7 @@
     "jstransformer-jade": "0.1.1",
     "jstransformer-markdown-it": "0.2.3",
     "metalsmith": "2.2.0",
-    "metalsmith-browserify": "0.1.0",
+    "metalsmith-browserify-alt": "1.0.1",
     "metalsmith-jstransformer": "0.7.1",
     "metalsmith-sense-sass": "1.1.0",
     "metalsmith-start": "2.0.1",
