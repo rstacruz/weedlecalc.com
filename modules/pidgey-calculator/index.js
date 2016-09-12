@@ -144,7 +144,7 @@ function transferPidgeys ([inventory, steps], pokemonId, toTransfer) {
 
 function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
   inventory = update(inventory, `${pokemonId}.count`, c => c - toEvolve)
-  inventory = update(inventory, `${pokemonId}.candies`, c => c - toEvolve * tnl)
+  inventory = update(inventory, `${pokemonId}.candies`, c => c - toEvolve * (tnl - 1))
   inventory = update(inventory, `${nextId}.count`, c => c + toEvolve)
 
   steps = push(steps, {
@@ -166,20 +166,22 @@ function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
 
 function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
   const candies = inventory[pokemonId].candies
-  const toSpare = Math.min(candies - toEvolve * (tnl - 1), toEvolve)
-  const toTransfer = toEvolve - toSpare
+
+  // Try to optimize;
+  const toSpare = Math.min(candies - toEvolve * (tnl - 2), toEvolve)
+  const toTransEvolve = toEvolve - toSpare
 
   // Transfer-evolve
-  if (toTransfer > 0) {
-    inventory = update(inventory, `${pokemonId}.count`, c => c - toTransfer)
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - toTransfer * (tnl - 1))
+  if (toTransEvolve > 0) {
+    inventory = update(inventory, `${pokemonId}.count`, c => c - toTransEvolve)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - toTransEvolve * (tnl - 2))
     steps = push(steps, {
       action: 'evolve-transfer',
       pokemonId,
       nextId,
-      count: toTransfer,
-      exp: toTransfer * 1000,
-      duration: toTransfer * TRANSFER_EVOLVE_DURATION,
+      count: toTransEvolve,
+      exp: toTransEvolve * 1000,
+      duration: toTransEvolve * TRANSFER_EVOLVE_DURATION,
       inventory
     })
   }
@@ -187,7 +189,7 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
   // Evolve only
   if (toSpare > 0) {
     inventory = update(inventory, `${pokemonId}.count`, c => c - toSpare)
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - toSpare * tnl)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - toSpare * (tnl - 1))
     inventory = update(inventory, `${nextId}.count`, c => c + toSpare)
     steps = push(steps, {
       action: 'evolve',
@@ -226,8 +228,8 @@ function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
 
     // Given `newCandies`, how many can we evolve?
     const evolvable = options.transfer
-      ? Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 1))
-      : Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 0))
+      ? Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 2))
+      : Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 1))
 
     const result = [pidgeysToTransfer, pidgeottosToTransfer, evolvable]
 
@@ -245,11 +247,28 @@ function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
  *
  * `tnl` is how many candies to evolve (eg, 12 for Pidgey).
  * `extra` is how much you get out of an evolution (eg, 2 if
- * evolve-and-transfer, 1 if evolve-only)
+ * evolve-and-transfer, 1 if evolve-only).
  */
 
 function getEvolvable (candies, tnl, extra) {
+  // How many evolutions can you get? If extra is `2` (ie, evolve-and-transfer),
+  // then it takes 10 candies to evolve one Pidgey.
   var n = Math.floor(candies / (tnl - extra))
+
+  // ...But if you have less than `2` candies left, that means you're lacking
+  // candies for one evolution, so subtract 1 from the result in that case.
+  //
+  // Eg:
+  //
+  //   21 candies
+  //   12 candy to evolve (`tnl`)
+  //   2 extra
+  //   21 - 12 + 2 - 12 + 2 = 1
+  //   Result = Math.floor(21 / 10) - 1 = 1
+  //
+  // Since 1 is less than 2, subtract 1 from the result. You can evolve only
+  // 1 Pidgey. This is true, because after the first evolution 21 - 12 + 2 = 11,
+  // not enough candy for another evolution.
   var left = candies - n * (tnl - extra)
   return left >= extra ? n : n - 1
 }
