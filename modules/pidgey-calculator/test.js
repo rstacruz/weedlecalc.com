@@ -1,5 +1,6 @@
 const test = require('tape-plus')
 const calc = require('./index').calc
+const PC = require('./index')
 
 const PIDGEY = 16
 const PIDGEOTTO = 17
@@ -275,4 +276,34 @@ test.group('calc()', test => {
     t.equal(result.steps[1].action, 'evolve')
     t.equal(result.steps[1].count, 15)
   })
+})
+
+test.group('getMaxTransferable', test => {
+ // Returns a tuple of `[pidgeysToTransfer, pidgeottosToTransfer, pidgeysToEvolve]`
+  const TNL = 12
+
+  test('evolve only', t => {
+    // Transfer 12 pidgeys, 0 pidgeottos, and evolve 2
+    eo(t, [14, 0, 12], [12, 0, 2])
+    eo(t, [13, 0, 12], [0, 0, 1])
+    eo(t, [12, 0, 12], [0, 0, 1])
+    eo(t, [1, 12, 0], [0, 12, 1])
+  })
+
+  test('evolve and transfer', t => {
+    ent(t, [14, 0, 12], [11, 0, 2])
+    ent(t, [13, 0, 12], [11, 0, 2])
+    ent(t, [12, 0, 12], [0, 0, 1])
+    ent(t, [1, 12, 0], [0, 12, 1])
+  })
+
+  function eo (t, [pidgeys, pidgeottos, candy], expected) {
+    let result = PC.getMaxTransferable(pidgeys, pidgeottos, candy, TNL)
+    t.deepEqual(result, expected, `${pidgeys}p ${pidgeottos}P ${candy}c = ${expected.join(', ')}`)
+  }
+
+  function ent (t, [pidgeys, pidgeottos, candy], expected) {
+    let result = PC.getMaxTransferable(pidgeys, pidgeottos, candy, TNL, { transfer: true })
+    t.deepEqual(result, expected, `${pidgeys}p ${pidgeottos}P ${candy}c = ${expected.join(', ')}`)
+  }
 })

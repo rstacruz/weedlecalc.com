@@ -171,8 +171,8 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
 
   // Transfer-evolve
   if (toTransfer > 0) {
-    inventory = update(inventory, `${pokemonId}.count`, c => c - (toTransfer))
-    inventory = update(inventory, `${pokemonId}.candies`, c => c - (toTransfer) * (tnl - 1))
+    inventory = update(inventory, `${pokemonId}.count`, c => c - toTransfer)
+    inventory = update(inventory, `${pokemonId}.candies`, c => c - toTransfer * (tnl - 1))
     steps = push(steps, {
       action: 'evolve-transfer',
       pokemonId,
@@ -184,6 +184,7 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
     })
   }
 
+  // Evolve only
   if (toSpare > 0) {
     inventory = update(inventory, `${pokemonId}.count`, c => c - toSpare)
     inventory = update(inventory, `${pokemonId}.candies`, c => c - toSpare * tnl)
@@ -203,26 +204,28 @@ function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl
 }
 
 /*
- * Given `evolvedCount` pidgeottos, `count` pidgeys, and `candies`, find out
+ * Given `count` Pidgeys, `pidgeottos` Pidgeottos, and `candies`, find out
  * the best number to evolve.
  *
  * Returns a tuple of `[pidgeysToTransfer, pidgeottosToTransfer, pidgeysToEvolve]`.
  */
-function getMaxTransferable (count, evolvedCount, candies, tnl, options = {}) {
+function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
   let last
 
-  for (let i = (evolvedCount + count); i >= 0; i--) {
-    const pidgeottosToTransfer = i > evolvedCount ? evolvedCount : i
-    const pidgeysToTransfer = i > evolvedCount ? (i - evolvedCount) : 0
+  for (let i = (pidgeottos + pidgeys); i >= 0; i--) {
+    // try transfering all Pidgeottos and Pidgeys (eg, 10) and see how many you
+    // can evlove afterwards. (Later, try that with 1 less (eg, 9), and so on.)
+    const pidgeottosToTransfer = i > pidgeottos ? pidgeottos : i
+    const pidgeysToTransfer = i > pidgeottos ? (i - pidgeottos) : 0
 
     // By transfering ${i} pidgeys and pidgeottos (${pidgeys} left), you
     // can evolve ${evolvable}` Pidgeys. Let's find the maximum number of
     // ${evolvable}, with the least number of ${i}.
-    const pidgeys = count - pidgeysToTransfer
+    const left = pidgeys - pidgeysToTransfer
     const newCandies = candies + i
     const evolvable = options.transfer
-      ? Math.min(pidgeys, Math.floor((newCandies - 1) / (tnl - 1)))
-      : Math.min(pidgeys, Math.floor(newCandies / tnl))
+      ? Math.min(left, Math.floor((newCandies - 1) / (tnl - 1)))
+      : Math.min(left, Math.floor(newCandies / tnl))
 
     const result = [pidgeysToTransfer, pidgeottosToTransfer, evolvable]
     if (last && evolvable < last[2]) return last
@@ -248,4 +251,4 @@ function getTotals (steps) {
   }, { duration: 0, exp: 0 })
 }
 
-module.exports = { calc, pokedex }
+module.exports = { calc, pokedex, getMaxTransferable }
