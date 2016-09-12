@@ -167,8 +167,16 @@ function evolveOnly ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
 function evolveAndTransfer ([inventory, steps], pokemonId, nextId, toEvolve, tnl) {
   const candies = inventory[pokemonId].candies
 
-  // Try to optimize;
-  const toSpare = Math.min(candies - toEvolve * (tnl - 2), toEvolve)
+  // Try to optimize by minimizing evolve-transfers.  If we try to
+  // transfer-evolve everything, we'll have this many candies left...
+  const candiesLeft = candies - toEvolve * (tnl - 2)
+
+  // If that's too many, maybe we can do with less. Every "extra"
+  // transfer gets you 2 candy to spare. That is, for every 2 candy
+  // left, you can choose not to transfer that instead. We'll "spare"
+  // them; that is, they won't be transfered because that's just
+  // extra time.
+  const toSpare = Math.min(Math.floor(candiesLeft / 2), toEvolve)
   const toTransEvolve = toEvolve - toSpare
 
   // Transfer-evolve
