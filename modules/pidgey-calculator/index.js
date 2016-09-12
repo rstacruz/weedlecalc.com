@@ -213,21 +213,26 @@ function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
   let last
 
   for (let i = (pidgeottos + pidgeys); i >= 0; i--) {
-    // try transfering all Pidgeottos and Pidgeys (eg, 10) and see how many you
-    // can evlove afterwards. (Later, try that with 1 less (eg, 9), and so on.)
+    // Try transfering all Pidgeottos and Pidgeys (eg, 10) and see how many you
+    // can evolve afterwards. (Later, try that with 1 less (eg, 9), and so on.)
     const pidgeottosToTransfer = i > pidgeottos ? pidgeottos : i
     const pidgeysToTransfer = i > pidgeottos ? (i - pidgeottos) : 0
 
-    // By transfering ${i} pidgeys and pidgeottos (${pidgeys} left), you
-    // can evolve ${evolvable}` Pidgeys. Let's find the maximum number of
-    // ${evolvable}, with the least number of ${i}.
-    const left = pidgeys - pidgeysToTransfer
+    // Let's transfer ${i} Pidgeys and Pidgeottos.
+    const pidgeysLeft = pidgeys - pidgeysToTransfer
+
+    // Get candies after pre-transfering.
     const newCandies = candies + i
+
+    // How many can we evolve?
     const evolvable = options.transfer
-      ? Math.min(left, Math.floor((newCandies - 1) / (tnl - 1)))
-      : Math.min(left, Math.floor(newCandies / tnl))
+      ? Math.min(pidgeysLeft, Math.floor((newCandies - 1) / (tnl - 1)))
+      : Math.min(pidgeysLeft, Math.floor((newCandies - 0) / (tnl - 0)))
 
     const result = [pidgeysToTransfer, pidgeottosToTransfer, evolvable]
+
+    // Let's find the maximum number of ${evolvable},
+    // with the least number of ${i}.
     if (last && evolvable < last[2]) return last
     last = result
   }
