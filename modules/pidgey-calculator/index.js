@@ -224,10 +224,10 @@ function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
     // Get candies after pre-transfering.
     const newCandies = candies + i
 
-    // How many can we evolve?
+    // Given `newCandies`, how many can we evolve?
     const evolvable = options.transfer
-      ? Math.min(pidgeysLeft, Math.floor((newCandies - 1) / (tnl - 1)))
-      : Math.min(pidgeysLeft, Math.floor((newCandies - 0) / (tnl - 0)))
+      ? Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 1))
+      : Math.min(pidgeysLeft, getEvolvable(newCandies, tnl, 0))
 
     const result = [pidgeysToTransfer, pidgeottosToTransfer, evolvable]
 
@@ -238,6 +238,20 @@ function getMaxTransferable (pidgeys, pidgeottos, candies, tnl, options = {}) {
   }
 
   return last
+}
+
+/*
+ * Internal: given `candies`, how many can you evolve?
+ *
+ * `tnl` is how many candies to evolve (eg, 12 for Pidgey).
+ * `extra` is how much you get out of an evolution (eg, 2 if
+ * evolve-and-transfer, 1 if evolve-only)
+ */
+
+function getEvolvable (candies, tnl, extra) {
+  var n = Math.floor(candies / (tnl - extra))
+  var left = candies - n * (tnl - extra)
+  return left >= extra ? n : n - 1
 }
 
 /**

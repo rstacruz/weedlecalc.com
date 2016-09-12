@@ -283,7 +283,8 @@ test.group('getMaxTransferable', test => {
   const TNL = 12
 
   test('evolve only', t => {
-    // Transfer 12 pidgeys, 0 pidgeottos, and evolve 2
+    // Given 14 pidgeys, 0 pidgeottos, 12 candies...
+    // then transfer 12 pidgeys, 0 pidgeottos, and evolve 2
     eo(t, [14, 0, 12], [12, 0, 2])
     eo(t, [13, 0, 12], [0, 0, 1])
     eo(t, [12, 0, 12], [0, 0, 1])
