@@ -5,13 +5,11 @@
   height: 32px;
   line-height: 32px - 4px;
   text-align: center;
-  background: rgba($accent, .1);
+  background: rgba($accent, 0.1);
   color: $accent;
   border-radius: 50%;
-
   margin-right: 12px;
   margin-left: 4px;
-
 
   &::before {
     font-size: 18px;
@@ -19,17 +17,18 @@
 
   &.-egg {
     &::before { @include ion-icon('egg'); }
+
     color: white;
     background: #9c27b0;
   }
 
   &.-transfer {
-    background: rgba(#eaa, .2);
+    background: rgba(#eaa, 0.2);
   }
 
   &.-evolve,
   &.-evolve-transfer {
-    background: rgba($accent, .2);
+    background: rgba($accent, 0.2);
   }
 
   > img {

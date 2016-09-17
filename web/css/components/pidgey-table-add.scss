@@ -28,6 +28,7 @@
 
   > button::before {
     @include ion-icon('ios-plus-outline', 24px);
+
     color: white;
     margin-right: 8px;
     position: relative;

@@ -1,10 +1,8 @@
 .form-control {
-  background: transparent;
   border: 0;
   padding: 0 8px;
-  background: rgba(black, .1);
+  background: rgba(black, 0.1);
   border-radius: 2px;
-
   height: 24px;
   line-height: 24px;
   color: white;
@@ -17,7 +15,7 @@
   }
 
   &:focus {
-    background: rgba(white, .1);
+    background: rgba(white, 0.1);
   }
 }
 
@@ -29,7 +27,7 @@ select {
 
   &[data-selected=""] {
     font-weight: normal;
-    color: rgba(white, .5);
+    color: rgba(white, 0.5);
   }
 
   &:hover,

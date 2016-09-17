@@ -1,8 +1,10 @@
+/* Vendors */
 @import '../../node_modules/normalize.css/normalize';
 @import '../../node_modules/iconfonts/stylesheets/ionicons';
 @import '../../node_modules/hint.css/hint';
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700');
 
+/* Styles */
 @import './variables';
 @import './mixins/mixins';
 @import './base/base';

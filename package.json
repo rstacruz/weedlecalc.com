@@ -46,12 +46,14 @@
     "qs": "6.2.1",
     "redux": "3.5.2",
     "redux-thunk": "2.1.0",
+    "stylelint-config-standard": "13.0.0",
     "uglify-js": "2.7.3",
     "uglifyify": "3.0.2"
   },
   "devDependencies": {
     "deku-stateful": "1.5.0",
     "git-update-ghpages": "1.3.0",
+    "stylelint": "7.2.0",
     "watchify": "3.7.0"
   },
   "keywords": [],
@@ -63,6 +65,7 @@
     "deploy": "run-s build deploy:deploy",
     "deploy:deploy": "git-update-ghpages rstacruz/weedlecalc.com public -b gh-pages",
     "start": "metalsmith-start",
+    "lint:css": "stylelint web/css/*.scss web/css/*/*.scss",
     "test": "cd modules/pidgey-calculator && npm test"
   }
 }
