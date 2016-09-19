@@ -1,0 +1,19 @@
+.top-icon {
+  text-align: center;
+  display: block;
+  color: $accent2;
+
+  &::before {
+    @include ion-icon('egg');
+
+    font-size: 96px;
+
+    @media (max-width: 768px) {
+      font-size: 72px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 48px;
+    }
+  }
+}

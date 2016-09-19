@@ -29,21 +29,25 @@ function PidgeyForm ({dispatch, context, path}) {
               value={rowIds[id]}
               onremove={hasRemove && removeRow(rowIds, dispatch, id)} />)}
           <tr>
-            <td colspan="1" class="pidgey-table-add">
-              <button onclick={addRow(rowIds, dispatch)}>Add another Pokemon</button>
+            <td colspan="1">
+              <div class="pidgey-table-add">
+                <button onclick={addRow(rowIds, dispatch)}>Add another Pokemon</button>
+              </div>
             </td>
-            <td colspan="3" class="pidgey-table-add">
-              <label class="checkbox-label">
-                <input type="checkbox" name="transfer" value="1"
-                   checked={form.transfer}
-                   onchange={saveForm(dispatch)} />
-                <span
-                  class="hint--bottom hint--large"
-                  attributes={{
-                    'aria-label': 'Transfer your Pidgeottos right after evolving them from Pidgeys (if necessary). Yields more leftover Pidgeys/Pidgeottos/candies, but may take more time. Turning this off also gives you a chance to inspect for any Pidgeottos you\'d like to keep.'
-                  }}
-                  >Transfer immediately</span>
-              </label>
+            <td colspan="3">
+              <div class="pidgey-table-add">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="transfer" value="1"
+                     checked={form.transfer}
+                     onchange={saveForm(dispatch)} />
+                  <span
+                    class="hint--bottom hint--large"
+                    attributes={{
+                      'aria-label': 'Transfer your Pidgeottos right after evolving them from Pidgeys (if necessary). Yields more leftover Pidgeys/Pidgeottos/candies, but may take more time. Turning this off also gives you a chance to inspect for any Pidgeottos you\'d like to keep.'
+                    }}
+                    >Transfer immediately</span>
+                </label>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -80,7 +84,7 @@ function PidgeyRow ({props, dispatch}) {
 
   return <tr class="pidgey-row" key={id}>
     <td class="pokemon" key="pokemon">
-      <select name={`pokemon[${id}][id]`}
+      <select class="pokemon-select" name={`pokemon[${id}][id]`}
         attributes={{'data-selected': value.id || ""}}
         onchange={saveForm(dispatch)}>
         {pokemonOptions(value.id)}
