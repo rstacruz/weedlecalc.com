@@ -66,7 +66,7 @@
     "deploy": "run-s build deploy:deploy",
     "deploy:deploy": "git-update-ghpages rstacruz/weedlecalc.com public -b gh-pages",
     "start": "metalsmith-start",
-    "lint:css": "stylelint web/css/*.scss web/css/*/*.scss",
+    "lint:css": "stylelint 'web/css/**/*.scss'",
     "test": "cd modules/pidgey-calculator && npm test"
   }
 }
