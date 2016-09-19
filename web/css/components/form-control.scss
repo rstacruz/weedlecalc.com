@@ -25,7 +25,7 @@ select {
   color: white;
   font-weight: bold;
 
-  &[data-selected=""] {
+  &[data-selected=''] {
     font-weight: normal;
     color: rgba(white, 0.5);
   }

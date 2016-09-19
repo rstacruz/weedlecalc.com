@@ -55,7 +55,7 @@ summary:active {
 }
 
 // No spin buttons, but up-down arrow keys work
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   display: none;
 }

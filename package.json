@@ -19,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "@rstacruz/stylelint-config-strict": "13.0.2",
     "babel-plugin-syntax-jsx": "6.13.0",
     "babel-plugin-transform-react-jsx": "6.8.0",
     "babel-preset-es2015": "6.13.2",
